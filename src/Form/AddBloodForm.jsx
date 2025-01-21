@@ -102,7 +102,7 @@ const AddBloodForm = () => {
       if (response.status === 200) {
         toast.success('Donation request created successfully!');
         form.reset();
-        navigate('/');
+        navigate('/dashboard/My-donation-request');
       } else {
         toast.error('Error creating donation request.');
       }

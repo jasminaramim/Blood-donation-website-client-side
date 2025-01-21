@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
+import { UserGroupIcon } from '@heroicons/react/outline'; // Import the Manage User Icon
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure'; // Your custom Axios hook
 import useAuth from '../../../Hoooks/useAuth'; // Auth context for user details
@@ -59,15 +60,17 @@ const ManageUsers = () => {
         <title>Manage Users</title>
       </Helmet>
       <div className="py-8">
-        <h2 className="text-2xl font-semibold leading-tight">Manage Users</h2>
+        <h2 className="text-2xl font-semibold leading-tight text-red-600 flex items-center">
+          <UserGroupIcon className="w-6 h-6 mr-2 text-red-600" /> Manage Users
+        </h2>
         <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center">
-            <label htmlFor="filter" className="mr-2">Filter by Status:</label>
+            <label htmlFor="filter" className="mr-2 text-red-600">Filter by Status:</label>
             <select
               id="filter"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="border rounded px-2 py-1"
+              className="border rounded px-2 py-1 text-red-600"
             >
               <option value="all">All</option>
               <option value="active">Active</option>
@@ -80,12 +83,12 @@ const ManageUsers = () => {
             <table className="min-w-full leading-normal">
               <thead>
                 <tr>
-                  <th className="px-5 py-3 border-b bg-gray-100 text-gray-800 text-left text-sm uppercase">Avatar</th>
-                  <th className="px-5 py-3 border-b bg-gray-100 text-gray-800 text-left text-sm uppercase">Name</th>
-                  <th className="px-5 py-3 border-b bg-gray-100 text-gray-800 text-left text-sm uppercase">Email</th>
-                  <th className="px-5 py-3 border-b bg-gray-100 text-gray-800 text-left text-sm uppercase">Role</th>
-                  <th className="px-5 py-3 border-b bg-gray-100 text-gray-800 text-left text-sm uppercase">Status</th>
-                  <th className="px-5 py-3 border-b bg-gray-100 text-gray-800 text-left text-sm uppercase">Actions</th>
+                  <th className="px-5 py-3 border-b bg-red-100 text-red-600 text-left text-sm uppercase">Avatar</th>
+                  <th className="px-5 py-3 border-b bg-red-100 text-red-600 text-left text-sm uppercase">Name</th>
+                  <th className="px-5 py-3 border-b bg-red-100 text-red-600 text-left text-sm uppercase">Email</th>
+                  <th className="px-5 py-3 border-b bg-red-100 text-red-600 text-left text-sm uppercase">Role</th>
+                  <th className="px-5 py-3 border-b bg-red-100 text-red-600 text-left text-sm uppercase">Status</th>
+                  <th className="px-5 py-3 border-b bg-red-100 text-red-600 text-left text-sm uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -101,7 +104,7 @@ const ManageUsers = () => {
                     <td className="px-5 py-5 border-b bg-white text-sm">
                       <Menu as="div" className="relative inline-block text-left">
                         <div>
-                          <Menu.Button className="px-4 py-2 bg-gray-200 rounded">
+                          <Menu.Button className="px-4 py-2 bg-red-200 rounded text-red-600">
                             Actions <ChevronDownIcon className="w-4 h-4 ml-2" />
                           </Menu.Button>
                         </div>
@@ -110,7 +113,7 @@ const ManageUsers = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <button
-                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-gray-100' : ''}`}
+                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-red-100' : ''}`}
                                   onClick={() =>
                                     handleStatusChange(user._id, user.status === 'active' ? 'blocked' : 'active')
                                   }
@@ -122,7 +125,7 @@ const ManageUsers = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <button
-                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-gray-100' : ''}`}
+                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-red-100' : ''}`}
                                   onClick={() => handleRoleChange(user._id, 'volunteer')}
                                 >
                                   Make Volunteer
@@ -132,7 +135,7 @@ const ManageUsers = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <button
-                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-gray-100' : ''}`}
+                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-red-100' : ''}`}
                                   onClick={() => handleRoleChange(user._id, 'admin')}
                                 >
                                   Make Admin
@@ -152,17 +155,17 @@ const ManageUsers = () => {
         <div className="flex justify-between items-center mt-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="px-4 py-2 bg-gray-200 rounded"
+            className="px-4 py-2 bg-red-200 rounded text-red-600"
             disabled={currentPage === 1}
           >
             Previous
           </button>
-          <span>
+          <span className="text-red-600">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            className="px-4 py-2 bg-gray-200 rounded"
+            className="px-4 py-2 bg-red-200 rounded text-red-600"
             disabled={currentPage === totalPages}
           >
             Next
