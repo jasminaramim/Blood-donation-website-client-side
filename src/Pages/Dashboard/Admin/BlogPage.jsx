@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
+import toast from 'react-hot-toast';
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]); // State for blogs
@@ -24,6 +26,28 @@ const BlogPage = () => {
     fetchBlogs();
   }, []);
 
+  // Handle blog deletion with SweetAlert2 confirmation
+  const deleteBlog = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this item!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/add-blog/${id}`);
+        toast.success('Blog Deleted Successfully!');
+        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id)); // Corrected state update
+      } catch (err) {
+        toast.error('Failed to delete the Blog!');
+      }
+    }
+  };
+
   // Handle blog status update (publish)
   const handlePublish = async (id) => {
     try {
@@ -36,11 +60,11 @@ const BlogPage = () => {
             blog._id === id ? { ...blog, status: 'published' } : blog
           )
         );
-        alert('Blog published successfully!');
+        Swal.fire('Published!', 'Your blog has been published.', 'success');
       }
     } catch (err) {
       console.error('Error publishing blog:', err);
-      alert('Failed to publish the blog. Please try again.');
+      Swal.fire('Error!', 'Failed to publish the blog. Please try again.', 'error');
     }
   };
 
@@ -113,12 +137,19 @@ const BlogPage = () => {
                 <button
                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
                   onClick={() =>
-                    alert('Unpublish functionality can be added here!')
+                    Swal.fire('Info!', 'Unpublish functionality can be added here!', 'info')
                   }
                 >
                   Unpublish
                 </button>
               )}
+              {/* Delete Button */}
+              <button
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300 mt-2"
+                onClick={() => deleteBlog(blog._id)}
+              >
+                Delete
+              </button>
             </div>
           ))
         ) : (
