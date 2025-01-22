@@ -23,6 +23,7 @@ import ContentManagementPage from '../Pages/Dashboard/Admin/ContentManagementPag
 import AddBlogPage from '../Pages/Dashboard/Admin/AddBlogPage'
 import DonorDashboard from '../Pages/Dashboard/Customer/DonorDashboard'
 import VolunteerDashboard from '../Pages/Dashboard/Volentiar/VolunteerDashboard'
+import Search from '../Home/Search'
 
 export const router = createHashRouter([
   {
@@ -38,9 +39,11 @@ export const router = createHashRouter([
         path: '/plant/:id',
         element: <BloodDetails />,
       },
+      { path: '/search', element: <Search /> },
     ],
   },
   { path: '/login', element: <Login /> },
+  
   { path: '/signup', element: <Registration /> },
   {
     path: '/dashboard',
