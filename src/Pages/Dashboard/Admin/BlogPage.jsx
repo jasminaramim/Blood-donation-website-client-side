@@ -76,7 +76,7 @@ const BlogPage = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      <h1 className="text-3xl font-bold text-red-600 mb-6 text-center">
         Blog Management
       </h1>
 
@@ -90,7 +90,7 @@ const BlogPage = () => {
             id="filter"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             <option value="all">All</option>
             <option value="draft">Draft</option>
@@ -127,7 +127,7 @@ const BlogPage = () => {
               </p>
               {blog.status === 'draft' && (
                 <button
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300"
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
                   onClick={() => handlePublish(blog._id)}
                 >
                   Publish
@@ -135,7 +135,7 @@ const BlogPage = () => {
               )}
               {blog.status === 'published' && (
                 <button
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+                  className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300"
                   onClick={() =>
                     Swal.fire('Info!', 'Unpublish functionality can be added here!', 'info')
                   }
@@ -145,7 +145,7 @@ const BlogPage = () => {
               )}
               {/* Delete Button */}
               <button
-                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300 mt-2"
+                className="px-4 ml-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 mt-2"
                 onClick={() => deleteBlog(blog._id)}
               >
                 Delete

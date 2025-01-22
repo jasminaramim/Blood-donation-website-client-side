@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AiOutlineAppstoreAdd } from 'react-icons/ai'; // Content management icon
 import BlogPage from './BlogPage';
 
 const ContentManagementPage = () => {
@@ -13,10 +14,13 @@ const ContentManagementPage = () => {
     <div className="content-management-page">
       {/* Sticky Navbar */}
       <div className="sticky top-0 z-50 bg-white shadow-md px-4 py-3 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Content Management</h1>
+        <div className="flex items-center">
+          <AiOutlineAppstoreAdd className="text-red-500 mr-2" size={24} /> {/* Icon */}
+          <h1 className="text-2xl font-bold text-gray-800">Content Management</h1>
+        </div>
         <button
           onClick={openModal}
-          className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow transition duration-200"
+          className="px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md shadow transition duration-200"
         >
           Add Blog
         </button>
@@ -36,7 +40,7 @@ const ContentManagementPage = () => {
               </button>
               <Link
                 to="/dashboard/add-blog"
-                className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-md transition duration-200"
+                className="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md transition duration-200"
                 onClick={closeModal}
               >
                 Yes

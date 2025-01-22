@@ -22,11 +22,10 @@ const Sidebar = () => {
     setActive(!isActive)
   }
 
-  console.log('Role:', role) // Check if role is being correctly set
-  console.log('isActive:', isActive) // Check if sidebar toggle state is correct
-  console.log('IsLoading:', isLoading) // Check if role is loading properly
-
-  if (isLoading) return <div>Loading...</div> // Wait for loading state to finish
+  console.log('Role:', role) 
+  console.log('isActive:', isActive) 
+  console.log('IsLoading:', isLoading) 
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <>
@@ -58,7 +57,7 @@ const Sidebar = () => {
         className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${isActive ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out`}
       >
         <div>
-          <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-lime-100 mx-auto">
+          <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-red-100 mx-auto">
             <Link to="/">
               <img
                 src={logo}

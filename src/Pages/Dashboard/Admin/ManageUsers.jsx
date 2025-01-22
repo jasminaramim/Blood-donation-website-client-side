@@ -2,20 +2,22 @@ import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { UserGroupIcon } from '@heroicons/react/outline'; // Import the Manage User Icon
-import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../../Hoooks/useAxiosSecure'; // Your custom Axios hook
-import useAuth from '../../../Hoooks/useAuth'; // Auth context for user details
+import { UserGroupIcon } from '@heroicons/react/outline';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
+import useAuth from '../../../Hoooks/useAuth';
+import toast from 'react-hot-toast';
 
 const ManageUsers = () => {
   const { user } = useAuth(); // Get the logged-in user's details
   const axiosSecure = useAxiosSecure(); // Axios instance with token
+  const queryClient = useQueryClient(); // Access React Query client
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   // Fetch all users with react-query
-  const { data: users = [], isLoading } = useQuery({
+  const { data: users = [], isLoading, refetch } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       const { data } = await axiosSecure('/all-users');
@@ -29,31 +31,49 @@ const ManageUsers = () => {
   // Pagination logic
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage, 
+    (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Handle actions for blocking, unblocking, and changing roles
+  
   const handleStatusChange = async (userId, newStatus) => {
     try {
+   
+      queryClient.setQueryData(['users'], (oldData) =>
+        oldData.map(user =>
+          user._id === userId ? { ...user, status: newStatus } : user
+        )
+      );
+
+   
       await axiosSecure.put(`/users/status/${userId}`, { status: newStatus });
-      alert(`User ${newStatus === 'active' ? 'unblocked' : 'blocked'}`);
+      toast.success(`User ${newStatus === 'active' ? 'unblocked' : 'blocked'}`);
     } catch (error) {
-      console.error("Error changing status:", error);
-      alert('Failed to change user status');
+      console.error('Error changing status:', error);
+      toast.error('Failed to change user status');
+      refetch();
     }
   };
 
-  const handleRoleChange = async (userId, newRole) => {
+  const handleRoleChange = async (id, newRole) => {
     try {
-      await axiosSecure.put(`/users/role/${userId}`, { role: newRole });
-      alert(`User role changed to ${newRole}`);
+  
+      queryClient.setQueryData(['users'], (oldData) =>
+        oldData.map(user =>
+          user._id === id ? { ...user, role: newRole } : user
+        )
+      );
+  
+
+      await axiosSecure.put(`/users/role/${id}`, { role: newRole });
+      toast.success(`User role changed to ${newRole}`);
     } catch (error) {
-      console.error("Error changing role:", error);
-      alert('Failed to change user role');
+      console.error('Error changing role:', error);
+      toast.error('Failed to change user role');
+      refetch(); // Revert changes if API call fails
     }
   };
-
+  
   return (
     <div className="container mx-auto px-4 sm:px-8">
       <Helmet>

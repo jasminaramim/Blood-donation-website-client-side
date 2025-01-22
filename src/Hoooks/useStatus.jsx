@@ -1,24 +1,24 @@
 import React from 'react';
 import useAxiosSecure from './useAxiosSecure';
 import useAuth from './useAuth';
-import { useQuery } from '@tanstack/react-query';  // Corrected import
+import { useQuery } from '@tanstack/react-query';  
 
 const useStatus = () => {
-  const axiosSecure = useAxiosSecure();  // Hook to make secure API calls
-  const { user, loading } = useAuth();  // Hook to get the authenticated user
+  const axiosSecure = useAxiosSecure();  
+  const { user, loading } = useAuth(); 
 
   const { data: status, isLoading, error } = useQuery({
     queryKey: ['status', user?.email],
     queryFn: async () => {
-      // Make a request to fetch the status for the logged-in user
+  
       const { data } = await axiosSecure(`/all-users/status/${user.email}`);
-      return data;  // Assuming the API response contains the status
+      return data;  
     },
-    enabled: !!user?.email,  // Only fetch data if the user is authenticated
+    enabled: !!user?.email,  
     onError: (err) => console.error('Error fetching status:', err),  // Error handling
   });
 
-  return [status, isLoading, error];  // Return status data, loading state, and any errors
+  return [status, isLoading, error]; 
 };
 
 export default useStatus;

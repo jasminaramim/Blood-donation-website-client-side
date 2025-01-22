@@ -5,6 +5,7 @@ import useAuth from '../../../Hoooks/useAuth';
 import useRole from '../../../Hoooks/useRole';
 import useStatus from '../../../Hoooks/useStatus'; // Assuming useStatus hook is available
 import LoadingSpinner from '../../../Shared/LoadingSpinner';
+import { FaTint } from 'react-icons/fa'; // Import the blood drop icon from React Icons
 
 const Profile = () => {
   const { user, loading } = useAuth();
@@ -39,7 +40,7 @@ const Profile = () => {
   if (loading || isRoleLoading || isStatusLoading) return <LoadingSpinner />;
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen bg-red-50">
       <Helmet>
         <title>Profile</title>
       </Helmet>
@@ -59,16 +60,21 @@ const Profile = () => {
           </a>
 
           {/* Display the Role */}
-          <p className="p-2 px-4 text-xs text-white bg-lime-500 rounded-full">
+          <p className="p-2 px-4 text-xs text-white bg-red-500 rounded-full">
             {role?.role} {/* Assuming 'role' is an object with a 'role' property */}
           </p>
 
           {/* Display the Status */}
-          {/* // Assuming 'status' could be an object and you need to access a property, like `status.status`: */}
           <p className="p-2 px-4 text-xs text-white bg-blue-500 rounded-full mt-2">
             {status?.status || 'Loading...'} {/* Adjust to ensure a string is rendered */}
           </p>
 
+          <div className="mt-2 flex items-center justify-center">
+            <FaTint className="text-red-500 mr-2" size={20} />
+            <p className="text-xl font-medium text-gray-800">
+              Blood Group: {updatedData.bloodGroup || 'N/A'}
+            </p>
+          </div>
 
           <p className="mt-2 text-xl font-medium text-gray-800">
             User Id: {user?.uid}
@@ -78,7 +84,7 @@ const Profile = () => {
             <div className="flex flex-wrap items-center justify-between text-sm text-gray-600">
               <button
                 onClick={handleEditClick}
-                className="bg-lime-500 px-10 py-1 rounded-lg text-black cursor-pointer hover:bg-lime-800 block mb-1"
+                className="bg-red-500 px-10 py-1 rounded-lg text-white cursor-pointer hover:bg-red-700 block mb-1"
               >
                 Edit Profile
               </button>
@@ -107,7 +113,7 @@ const Profile = () => {
                     className="p-2 border border-gray-300 rounded-md bg-gray-200"
                   />
                 </div>
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                   <label htmlFor="address">Address</label>
                   <input
                     type="text"
@@ -118,8 +124,8 @@ const Profile = () => {
                     disabled={!isEditable}
                     className="p-2 border border-gray-300 rounded-md"
                   />
-                </div>
-                <div className="flex flex-col">
+                </div> */}
+                {/* <div className="flex flex-col">
                   <label htmlFor="bloodGroup">Blood Group</label>
                   <input
                     type="text"
@@ -130,13 +136,13 @@ const Profile = () => {
                     disabled={!isEditable}
                     className="p-2 border border-gray-300 rounded-md"
                   />
-                </div>
+                </div> */}
 
                 {isEditable && (
                   <button
                     type="button"
                     onClick={handleSaveClick}
-                    className="bg-lime-500 px-10 py-1 rounded-lg text-black cursor-pointer hover:bg-lime-800"
+                    className="bg-red-500 px-10 py-1 rounded-lg text-white cursor-pointer hover:bg-red-700"
                   >
                     Save Changes
                   </button>

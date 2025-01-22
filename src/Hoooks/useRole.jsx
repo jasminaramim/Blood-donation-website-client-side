@@ -4,8 +4,8 @@ import useAuth from './useAuth';
 import { useQuery } from '@tanstack/react-query';  // Corrected import
 
 const useRole = () => {
-    const axiosSecure = useAxiosSecure();  // Add parentheses to call the hook correctly
-    const { user, loading } = useAuth();  // Add parentheses to call the hook correctly
+    const axiosSecure = useAxiosSecure();  
+    const { user, loading } = useAuth(); 
 
     const { data: role, isLoading, error } = useQuery({
         queryKey: ['role', user?.email],
