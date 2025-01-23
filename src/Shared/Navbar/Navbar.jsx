@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import useAuth from '../../Hoooks/useAuth'
 import avatarImg from '../../assets/images/bloodAvt.jpg'
-import logo from '../../assets/images/logo.png'
+import logo from '../../assets/images/27577579_anuj24may_7.jpg'
 
 const Navbar = () => {
   const { user, logOut } = useAuth()
@@ -18,8 +18,10 @@ const Navbar = () => {
           <div className='flex flex-row items-center justify-between gap-3 md:gap-0'>
             {/* Logo */}
             <Link to='/'>
-              <img src={logo} alt='logo' width='50' height='50' />
+              <img src={logo} alt='logo' width='80' height='80' />
+              
             </Link>
+            <p className='text-gray-500 font-bold text-2xl'>Blood <span className='text-red-500'> Donation</span></p>
             {/* Dropdown Menu */}
             <div className='relative'>
               <div className='flex flex-row items-center gap-3'>

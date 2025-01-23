@@ -10,13 +10,12 @@ const BlogPage = () => {
 
   // Fetch blogs from the server using axiosSecure
   useEffect(() => {
+    let isMounted = true;
     const fetchBlogs = async () => {
       try {
-        const response = await axiosSecure.get('/add-blog'); // Adjust endpoint as necessary
-        if (Array.isArray(response.data)) {
-          setBlogs(response.data); // Set blogs if data is an array
-        } else {
-          console.error('Unexpected response format:', response.data);
+        const response = await axiosSecure.get('/add-blog');
+        if (isMounted && Array.isArray(response.data)) {
+          setBlogs(response.data);
         }
       } catch (err) {
         console.error('Error fetching blogs:', err);
@@ -24,6 +23,10 @@ const BlogPage = () => {
     };
 
     fetchBlogs();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Handle blog deletion with SweetAlert2 confirmation
@@ -48,7 +51,7 @@ const BlogPage = () => {
     }
   };
 
-  // Handle blog status update (publish)
+  // Handle blog status update (Publish)
   const handlePublish = async (id) => {
     try {
       const response = await axiosSecure.patch(`/add-blog/${id}`, {
@@ -65,6 +68,26 @@ const BlogPage = () => {
     } catch (err) {
       console.error('Error publishing blog:', err);
       Swal.fire('Error!', 'Failed to publish the blog. Please try again.', 'error');
+    }
+  };
+
+  // Handle blog status update (Unpublish)
+  const handleUnpublish = async (id) => {
+    try {
+      const response = await axiosSecure.patch(`/add-blog/${id}`, {
+        status: 'draft',
+      });
+      if (response.data.modifiedCount > 0) {
+        setBlogs((prevBlogs) =>
+          prevBlogs.map((blog) =>
+            blog._id === id ? { ...blog, status: 'draft' } : blog
+          )
+        );
+        Swal.fire('Unpublished!', 'Your blog has been moved back to draft.', 'success');
+      }
+    } catch (err) {
+      console.error('Error unpublishing blog:', err);
+      Swal.fire('Error!', 'Failed to unpublish the blog. Please try again.', 'error');
     }
   };
 
@@ -115,10 +138,10 @@ const BlogPage = () => {
                   className="w-full h-48 object-cover mb-4 rounded-md"
                 />
               )}
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-red-800 mb-4">
                 {blog.title}
               </h2>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              <h2 className="text-xl font-semibold text-red-800 mb-4">
                 {blog.category}
               </h2>
               <p className="text-gray-600 line-clamp-3 mb-4">{blog.description}</p>
@@ -136,9 +159,7 @@ const BlogPage = () => {
               {blog.status === 'published' && (
                 <button
                   className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300"
-                  onClick={() =>
-                    Swal.fire('Info!', 'Unpublish functionality can be added here!', 'info')
-                  }
+                  onClick={() => handleUnpublish(blog._id)}
                 >
                   Unpublish
                 </button>

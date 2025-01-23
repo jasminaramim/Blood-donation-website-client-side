@@ -24,6 +24,8 @@ import AddBlogPage from '../Pages/Dashboard/Admin/AddBlogPage'
 import DonorDashboard from '../Pages/Dashboard/Customer/DonorDashboard'
 import VolunteerDashboard from '../Pages/Dashboard/Volentiar/VolunteerDashboard'
 import Search from '../Home/Search'
+import PublishedBlogs from '../Home/PublishedBlogs'
+import BlogDetails from '../Home/BlogDetails'
 
 export const router = createHashRouter([
   {
@@ -40,6 +42,9 @@ export const router = createHashRouter([
         element: <BloodDetails />,
       },
       { path: '/search', element: <Search /> },
+      { path: '/blogs', element: <PublishedBlogs /> },
+      { path: '/blog-details/:id', element: <BlogDetails /> },
+      { path: '/blog-details', element: <BlogDetails /> },
     ],
   },
   { path: '/login', element: <Login /> },

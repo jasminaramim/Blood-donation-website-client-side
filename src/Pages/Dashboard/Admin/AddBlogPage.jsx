@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import useAuth from '../../../Hoooks/useAuth'; // Hook to fetch user info
-import { toast } from 'react-hot-toast'; // Toast for notifications
+import useAuth from '../../../Hoooks/useAuth'; 
+import { toast } from 'react-hot-toast';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -24,16 +24,16 @@ const AddBlogPage = () => {
 
     try {
       // Upload image first
-      const photoURL = await imageUpload(imageFile); // Ensure `imageUpload` function uploads and returns the image URL
+      const photoURL = await imageUpload(imageFile); 
 
       // Prepare blog data
       const blogData = {
         title: formData.get('title'),
         category: formData.get('category'),
         description: formData.get('description'),
-        imageUrl: photoURL, // Use uploaded image URL
-        status: 'draft', // Default status
-        author: user?.displayName || 'Anonymous', // Optional author field
+        imageUrl: photoURL, 
+        status: 'draft', 
+        author: user?.displayName || 'Anonymous', 
       };
 
       // Save blog data to the server
@@ -113,7 +113,7 @@ const AddBlogPage = () => {
                   url: URL.createObjectURL(e.target.files[0]), // Temporary preview
                 })
               }
-              className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+              className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-100 file:text-red-700 hover:file:bg-red-200"
             />
             {uploadImage?.url && (
               <div className="mt-4">
@@ -130,7 +130,7 @@ const AddBlogPage = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 mt-5 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200"
+          className="w-full py-3 mt-5 font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition duration-200"
           disabled={loading}
         >
           {loading ? 'Uploading...' : 'Create Blog'}
