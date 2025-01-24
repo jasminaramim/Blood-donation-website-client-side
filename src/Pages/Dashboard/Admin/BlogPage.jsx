@@ -151,7 +151,7 @@ const BlogPage = () => {
                 <strong>Status:</strong> {blog.status}
               </p>
               {/* Publish/Unpublish Buttons */}
-              {role === 'admin' && blog.status === 'draft' && (
+              {role.role === 'admin' && blog.status === 'draft' && (
                 <button
                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
                   onClick={() => handlePublish(blog._id)}
@@ -159,7 +159,7 @@ const BlogPage = () => {
                   Publish
                 </button>
               )}
-              {role === 'admin' && blog.status === 'published' && (
+              {role.role === 'admin' && blog.status === 'published' && (
                 <button
                   className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300"
                   onClick={() => handleUnpublish(blog._id)}
@@ -168,7 +168,7 @@ const BlogPage = () => {
                 </button>
               )}
               {/* Delete Button */}
-              {role === 'admin' && (
+              {role.role === 'admin' && (
                 <button
                   className="px-4 ml-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 mt-2"
                   onClick={() => deleteBlog(blog._id)}

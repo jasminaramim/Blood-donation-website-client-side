@@ -11,6 +11,7 @@ const AllBloodDonateRequest = () => {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRequest, setSelectedRequest] = useState(null); // Store the request for modal
+  const [statusFilter, setStatusFilter] = useState('All'); // New state for status filter
   const itemsPerPage = 5;
 
   // Get user role
@@ -27,9 +28,14 @@ const AllBloodDonateRequest = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Paginate the donation requests
-  const totalPages = Math.ceil(requests.length / itemsPerPage);
-  const paginatedRequests = requests.slice(
+  // Filter requests based on selected status (case-insensitive and handling null status)
+  const filteredRequests = statusFilter === 'All'
+    ? requests
+    : requests.filter(request => (request.status || 'Pending').toLowerCase() === statusFilter.toLowerCase());
+
+  // Paginate the filtered donation requests
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+  const paginatedRequests = filteredRequests.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -37,9 +43,8 @@ const AllBloodDonateRequest = () => {
   // Handle status update
   const handleStatusUpdate = useCallback(
     async (requestId, newStatus) => {
-      // Restrict volunteers to update only "Pending" and "In Progress"
       if (
-        role === 'volunteer' &&
+        role?.role === 'volunteer' &&
         !['Pending', 'In Progress'].includes(newStatus)
       ) {
         toast.error('You are not allowed to update to this status.', {
@@ -74,7 +79,7 @@ const AllBloodDonateRequest = () => {
         queryClient.invalidateQueries(['DonationRequests']);
       }
     },
-    [axiosSecure, queryClient, role]
+    [axiosSecure, queryClient, role?.role]
   );
 
   const goToNextPage = () => {
@@ -102,6 +107,25 @@ const AllBloodDonateRequest = () => {
           <h2 className="text-3xl font-semibold leading-tight text-gray-800">
             All Blood Donation Requests
           </h2>
+        </div>
+
+        {/* Filter UI */}
+        <div className="mb-4">
+          <label htmlFor="statusFilter" className="text-sm font-medium text-gray-700">
+            Filter by Status:
+          </label>
+          <select
+            id="statusFilter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="ml-2 px-4 py-2 bg-white border rounded-md"
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
         </div>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
@@ -172,25 +196,28 @@ const AllBloodDonateRequest = () => {
           >
             <h3 className="text-lg font-semibold mb-4 text-gray-800">Update Request Status</h3>
             <div className="space-y-4">
-              {['Pending', 'In Progress'].map((status) => (
-                <button
-                  key={status}
-                  className={`flex items-center justify-between px-4 py-3 text-sm w-full text-left transition duration-150 ease-in-out rounded-md ${
-                    selectedRequest.status === status
-                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                      : 'bg-red-50 text-gray-800 hover:bg-red-100'
-                  }`}
-                  onClick={() => {
-                    handleStatusUpdate(selectedRequest._id, status);
-                    setSelectedRequest(null);
-                  }}
-                  disabled={selectedRequest.status === status}
-                >
-                  <span className="font-medium">{status}</span>
-                  {selectedRequest.status === status && (
-                    <span className="text-green-500 font-bold text-xs">(Current)</span>
-                  )}
-                </button>
+              {['Pending', 'In Progress', 'Done', 'Cancelled'].map((status) => (
+                // Allow admins to update to any status, volunteers only to "Pending" and "In Progress"
+                (role?.role === 'admin' || ['Pending', 'In Progress'].includes(status)) && (
+                  <button
+                    key={status}
+                    className={`flex items-center justify-between px-4 py-3 text-sm w-full text-left transition duration-150 ease-in-out rounded-md ${
+                      selectedRequest.status === status
+                        ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                        : 'bg-red-50 text-gray-800 hover:bg-red-100'
+                    }`}
+                    onClick={() => {
+                      handleStatusUpdate(selectedRequest._id, status);
+                      setSelectedRequest(null);
+                    }}
+                    disabled={selectedRequest.status === status}
+                  >
+                    <span className="font-medium">{status}</span>
+                    {selectedRequest.status === status && (
+                      <span className="text-green-500 font-bold text-xs">(Current)</span>
+                    )}
+                  </button>
+                )
               ))}
             </div>
             <button
