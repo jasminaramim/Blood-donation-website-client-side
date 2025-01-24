@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
 import toast from 'react-hot-toast';
+import useRole from '../../../Hoooks/useRole'; // Assuming the useRole hook path is correct
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]); // State for blogs
   const [filter, setFilter] = useState('all'); // State for filtering by status
   const axiosSecure = useAxiosSecure();
+  const [role, isLoadingRole] = useRole(); // Get role using useRole hook
 
   // Fetch blogs from the server using axiosSecure
   useEffect(() => {
@@ -27,7 +29,7 @@ const BlogPage = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [axiosSecure]);
 
   // Handle blog deletion with SweetAlert2 confirmation
   const deleteBlog = async (id) => {
@@ -148,7 +150,8 @@ const BlogPage = () => {
               <p className="text-sm text-gray-500 mb-4">
                 <strong>Status:</strong> {blog.status}
               </p>
-              {blog.status === 'draft' && (
+              {/* Publish/Unpublish Buttons */}
+              {role === 'admin' && blog.status === 'draft' && (
                 <button
                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
                   onClick={() => handlePublish(blog._id)}
@@ -156,7 +159,7 @@ const BlogPage = () => {
                   Publish
                 </button>
               )}
-              {blog.status === 'published' && (
+              {role === 'admin' && blog.status === 'published' && (
                 <button
                   className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300"
                   onClick={() => handleUnpublish(blog._id)}
@@ -165,12 +168,14 @@ const BlogPage = () => {
                 </button>
               )}
               {/* Delete Button */}
-              <button
-                className="px-4 ml-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 mt-2"
-                onClick={() => deleteBlog(blog._id)}
-              >
-                Delete
-              </button>
+              {role === 'admin' && (
+                <button
+                  className="px-4 ml-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 mt-2"
+                  onClick={() => deleteBlog(blog._id)}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           ))
         ) : (

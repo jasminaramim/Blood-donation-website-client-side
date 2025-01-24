@@ -8,7 +8,7 @@ const VolentiarMenu = () => {
     <>
 <MenuItem icon={BsGraphUp} label='Statistics' address='/dashboard/Volunteer-Dashboard' />
 
-      <MenuItem icon={FaUserCog} label='Manage Users' address='manage-users' />
+      {/* <MenuItem icon={FaUserCog} label='Manage Users' address='manage-users' /> */}
       <MenuItem icon={MdOutlineBloodtype} label='All BloodDonate Request' address='all-blood-donation-request' />
       <MenuItem icon={ TbArrowAutofitContentFilled } label='Content Management' address='ContentManagementPage' />
     </>

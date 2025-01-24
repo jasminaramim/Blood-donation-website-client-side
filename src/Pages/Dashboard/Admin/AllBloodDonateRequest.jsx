@@ -1,20 +1,21 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { Helmet } from 'react-helmet-async';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
+import { Helmet } from 'react-helmet-async';
 import toast from 'react-hot-toast';
-import { FaDonate } from 'react-icons/fa'; // You can use an icon from react-icons
+import { FaDonate } from 'react-icons/fa';
+import useRole from '../../../Hoooks/useRole'; // Assuming this is implemented for role management
 
 const AllBloodDonateRequest = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRequest, setSelectedRequest] = useState(null); // Store the request for modal
   const itemsPerPage = 5;
 
-  // Fetch all donation requests with react-query
+  // Get user role
+  const [role, isRoleLoading] = useRole();
+
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ['DonationRequests'],
     queryFn: async () => {
@@ -33,85 +34,62 @@ const AllBloodDonateRequest = () => {
     currentPage * itemsPerPage
   );
 
-  const handleAcceptRequest = useCallback(async (requestId) => {
-    try {
-      // Check if status is already 'Accepted', avoid unnecessary update
-      const requestToUpdate = requests.find(req => req._id === requestId);
-      if (requestToUpdate?.status === 'Accepted') return;
-  
-      // Optimistic update: Immediately update the request status in the UI
-      queryClient.setQueryData(['DonationRequests'], (oldData) => {
-        return oldData.map((request) =>
-          request._id === requestId ? { ...request, status: 'Accepted' } : request
-        );
-      });
-  
-      // Perform the actual update on the server
-      await axiosSecure.put(
-        `${import.meta.env.VITE_API_URL}/donation-requests/${requestId}`,
-        { status: 'Accepted' }
-      );
-  
-      toast.success(`Request with ID: ${requestId} accepted`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-      });
-    } catch (error) {
-      console.error('Error accepting request:', error);
-      toast.error('Failed to accept request', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-      });
-      queryClient.invalidateQueries(['DonationRequests']);
-    }
-  }, [axiosSecure, queryClient, requests]);  
-  
+  // Handle status update
+  const handleStatusUpdate = useCallback(
+    async (requestId, newStatus) => {
+      // Restrict volunteers to update only "Pending" and "In Progress"
+      if (
+        role === 'volunteer' &&
+        !['Pending', 'In Progress'].includes(newStatus)
+      ) {
+        toast.error('You are not allowed to update to this status.', {
+          position: 'top-right',
+          autoClose: 5000,
+        });
+        return;
+      }
 
-  // Handle Reject request with optimistic update
-  const handleRejectRequest = useCallback(async (requestId) => {
-    try {
-      queryClient.setQueryData(['DonationRequests'], (oldData) => {
-        return oldData.map((request) =>
-          request._id === requestId ? { ...request, status: 'Rejected' } : request
+      try {
+        queryClient.setQueryData(['DonationRequests'], (oldData) =>
+          oldData.map((request) =>
+            request._id === requestId ? { ...request, status: newStatus } : request
+          )
         );
-      });
 
-      await axiosSecure.put(
-        `${import.meta.env.VITE_API_URL}/donation-requests/${requestId}`,
-        { status: 'Rejected' }
-      );
-      
-      toast.success(`Request with ID: ${requestId} rejected`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-      });
-    } catch (error) {
-      console.error('Error rejecting request:', error);
-      toast.error('Failed to reject request', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-      });
-      queryClient.invalidateQueries(['DonationRequests']);
-    }
-  }, [axiosSecure, queryClient]);
+        await axiosSecure.put(
+          `${import.meta.env.VITE_API_URL}/donation-requests/${requestId}`,
+          { status: newStatus }
+        );
+
+        toast.success(`Request status updated to ${newStatus}`, {
+          position: 'top-right',
+          autoClose: 5000,
+        });
+      } catch (error) {
+        console.error(`Error updating status to ${newStatus}:`, error);
+        toast.error(`Failed to update status to ${newStatus}`, {
+          position: 'top-right',
+          autoClose: 5000,
+        });
+        queryClient.invalidateQueries(['DonationRequests']);
+      }
+    },
+    [axiosSecure, queryClient, role]
+  );
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
   const goToPrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
+      setCurrentPage((prev) => prev - 1);
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || isRoleLoading) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto px-4 sm:px-8">
@@ -121,9 +99,11 @@ const AllBloodDonateRequest = () => {
       <div className="py-8">
         <div className="flex items-center mb-6">
           <FaDonate className="text-red-600 mr-3" size={30} />
-          <h2 className="text-3xl font-semibold leading-tight text-gray-800">All Blood Donation Requests</h2>
+          <h2 className="text-3xl font-semibold leading-tight text-gray-800">
+            All Blood Donation Requests
+          </h2>
         </div>
-        
+
         <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
           <table className="min-w-full table-auto">
             <thead className="bg-gradient-to-r from-red-500 to-red-600 text-white">
@@ -140,42 +120,17 @@ const AllBloodDonateRequest = () => {
                 <tr key={request._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm text-gray-800">{request.recipientName}</td>
                   <td className="px-6 py-4 text-sm text-gray-800">{request.bloodGroup}</td>
-                  <td className="px-6 py-4 text-sm text-gray-800">{new Date(request.donationDate).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {new Date(request.donationDate).toLocaleDateString()}
+                  </td>
                   <td className="px-6 py-4 text-sm text-gray-800">{request.status || 'Pending'}</td>
                   <td className="px-6 py-4 text-sm">
-                    <Menu as="div" className="relative inline-block text-left">
-                      <div>
-                        <Menu.Button className="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 focus:outline-none">
-                          Actions <ChevronDownIcon className="w-5 h-5 ml-2" />
-                        </Menu.Button>
-                      </div>
-                      <Transition>
-                        <Menu.Items className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg">
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-gray-100' : ''}`}
-                                onClick={() => handleAcceptRequest(request._id)}
-                                disabled={request.status === 'Accepted'}
-                              >
-                                {request.status === 'Accepted' ? 'Accepted' : 'Accept'}
-                              </button>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-gray-100' : ''}`}
-                                onClick={() => handleRejectRequest(request._id)}
-                                disabled={request.status === 'Accepted'}
-                              >
-                                Reject
-                              </button>
-                            )}
-                          </Menu.Item>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
+                    <button
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 focus:outline-none"
+                      onClick={() => setSelectedRequest(request)}
+                    >
+                      Actions
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -204,6 +159,49 @@ const AllBloodDonateRequest = () => {
           </button>
         </div>
       </div>
+
+      {/* Modal */}
+      {selectedRequest && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setSelectedRequest(null)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg w-96 p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">Update Request Status</h3>
+            <div className="space-y-4">
+              {['Pending', 'In Progress'].map((status) => (
+                <button
+                  key={status}
+                  className={`flex items-center justify-between px-4 py-3 text-sm w-full text-left transition duration-150 ease-in-out rounded-md ${
+                    selectedRequest.status === status
+                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                      : 'bg-red-50 text-gray-800 hover:bg-red-100'
+                  }`}
+                  onClick={() => {
+                    handleStatusUpdate(selectedRequest._id, status);
+                    setSelectedRequest(null);
+                  }}
+                  disabled={selectedRequest.status === status}
+                >
+                  <span className="font-medium">{status}</span>
+                  {selectedRequest.status === status && (
+                    <span className="text-green-500 font-bold text-xs">(Current)</span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setSelectedRequest(null)}
+              className="mt-6 w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
