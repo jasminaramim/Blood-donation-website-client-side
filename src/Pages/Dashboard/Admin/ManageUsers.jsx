@@ -25,7 +25,7 @@ const ManageUsers = () => {
     },
   });
 
-  // Filter users based on status (if applicable)
+
   const filteredUsers = filter === 'all' ? users : users.filter(user => user.status === filter);
 
   // Pagination logic

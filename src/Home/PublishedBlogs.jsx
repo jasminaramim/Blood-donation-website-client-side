@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAxiosSecure from '../Hoooks/useAxiosSecure';
+import AOS from 'aos'; 
+import 'aos/dist/aos.css';  
+// import { FlatESLint } from 'eslint/use-at-your-own-risk';
 
 const PublishedBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -22,6 +25,13 @@ const PublishedBlogs = () => {
     };
 
     fetchPublishedBlogs();
+    
+    // Initialize AOS on component mount
+    AOS.init({
+      duration: 1000, 
+      once:false,     
+    });
+
   }, [axiosSecure]);
 
   // Filter blogs based on search query
@@ -30,7 +40,7 @@ const PublishedBlogs = () => {
   );
 
   return (
-    <div className="p-6  bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl mt-20 font-bold text-red-600 mb-6 text-center">
         Published Blogs
       </h1>
@@ -53,6 +63,7 @@ const PublishedBlogs = () => {
             <div
               key={blog._id}
               className="relative bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:scale-105 group"
+              data-aos="flip-left"  
             >
               {/* Border Animation on Hover */}
               <div className="absolute bottom-0 left-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-full"></div>

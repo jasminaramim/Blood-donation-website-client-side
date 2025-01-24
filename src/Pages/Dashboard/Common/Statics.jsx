@@ -19,7 +19,7 @@ const Statistics = () => {
   const userRole = role?.role;
 
   // Redirect if role is not 'admin' or 'donor'
-  if (userRole !== 'admin' && userRole !== 'donor' && userRole !== 'Volentiar') {
+  if (userRole !== 'admin' && userRole !== 'donor' && userRole !== 'volunteer') {
     return <Navigate to="/login" />; 
   }
 
@@ -31,7 +31,7 @@ const Statistics = () => {
 
       {userRole === 'admin' && <AdminStatistics />}
       {userRole === 'donor' && <DonorDashboard />}
-      {userRole === 'volentiar' && <VolunteerDashboard />}
+      {userRole === 'volunteer' && <VolunteerDashboard />}
     </>
   );
 };

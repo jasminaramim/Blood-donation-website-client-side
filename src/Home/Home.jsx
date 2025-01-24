@@ -118,7 +118,7 @@ const Home = () => {
         ].map((item, index) => (
           <div
           key={index}
-          className="relative mt-12 bg-red-100 max-w-4xl p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 group"
+          className="relative mt-12 bg-red-100 max-w-4xl p-8  shadow-lg hover:shadow-xl transition-shadow duration-300 group"
           data-aos="zoom-in-down"  
         >
             {/* Border Animation on Hover */}
@@ -128,7 +128,7 @@ const Home = () => {
             {item.img && (
               <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
                 <img
-                  className="rounded-lg w-[200px] h-[200px] object-cover border-4 border-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:border-red-600"
+                  className=" w-[200px] h-[200px] object-cover border-4 border-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:border-red-600"
                   src={item.img}
                   alt={item.title}
                 />
@@ -137,7 +137,7 @@ const Home = () => {
 
             {/* Card Content */}
             <div className="mt-32 flex flex-col items-center md:items-start text-center md:text-left">
-              <h3 className="text-xl font-semibold">{item.title}</h3>
+              <h3 className="text-xl border-b-2 text-black  border-red-300 font-bold">{item.title}</h3>
               <p className="mt-4 text-gray-700">{item.text}</p>
             </div>
           </div>

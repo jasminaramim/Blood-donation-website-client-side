@@ -17,7 +17,7 @@ const Sidebar = () => {
   const [isActive, setActive] = useState(false)
   const [role, isLoading] = useRole()
 
-  // Sidebar Responsive Handler
+
   const handleToggle = () => {
     setActive(!isActive)
   }
@@ -73,7 +73,7 @@ const Sidebar = () => {
             <nav>
               {/* Conditional Menu Rendering Based on Role */}
               {role?.role === 'donor' && <DonorMenu />}
-              {role?.role === 'Volentiar' && <VolentiarMenu />}
+              {role?.role === 'volunteer' && <VolentiarMenu />}
               {role?.role === 'admin' && <AdminMenu />}
 
             </nav>
