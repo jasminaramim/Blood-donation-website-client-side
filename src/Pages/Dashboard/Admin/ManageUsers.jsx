@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import { UserGroupIcon } from '@heroicons/react/outline';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
@@ -15,6 +13,8 @@ const ManageUsers = () => {
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // Fetch all users with react-query
   const { data: users = [], isLoading, refetch } = useQuery({
@@ -25,7 +25,6 @@ const ManageUsers = () => {
     },
   });
 
-
   const filteredUsers = filter === 'all' ? users : users.filter(user => user.status === filter);
 
   // Pagination logic
@@ -35,19 +34,17 @@ const ManageUsers = () => {
     currentPage * itemsPerPage
   );
 
-  
   const handleStatusChange = async (userId, newStatus) => {
     try {
-   
       queryClient.setQueryData(['users'], (oldData) =>
         oldData.map(user =>
           user._id === userId ? { ...user, status: newStatus } : user
         )
       );
 
-   
       await axiosSecure.put(`/users/status/${userId}`, { status: newStatus });
       toast.success(`User ${newStatus === 'active' ? 'unblocked' : 'blocked'}`);
+      setIsModalOpen(false); // Close modal after action
     } catch (error) {
       console.error('Error changing status:', error);
       toast.error('Failed to change user status');
@@ -57,23 +54,32 @@ const ManageUsers = () => {
 
   const handleRoleChange = async (id, newRole) => {
     try {
-  
       queryClient.setQueryData(['users'], (oldData) =>
         oldData.map(user =>
           user._id === id ? { ...user, role: newRole } : user
         )
       );
-  
 
       await axiosSecure.put(`/users/role/${id}`, { role: newRole });
       toast.success(`User role changed to ${newRole}`);
+      setIsModalOpen(false); // Close modal after action
     } catch (error) {
       console.error('Error changing role:', error);
       toast.error('Failed to change user role');
-      refetch(); // Revert changes if API call fails
+      refetch();
     }
   };
-  
+
+  const openModal = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="container mx-auto px-4 sm:px-8">
       <Helmet>
@@ -122,49 +128,12 @@ const ManageUsers = () => {
                     <td className="px-5 py-5 border-b bg-white text-sm">{user.role}</td>
                     <td className="px-5 py-5 border-b bg-white text-sm">{user.status || 'N/A'}</td>
                     <td className="px-5 py-5 border-b bg-white text-sm">
-                      <Menu as="div" className="relative inline-block text-left">
-                        <div>
-                          <Menu.Button className="px-4 py-2 bg-red-200 rounded text-red-600">
-                            Actions <ChevronDownIcon className="w-4 h-4 ml-2" />
-                          </Menu.Button>
-                        </div>
-                        <Transition>
-                          <Menu.Items className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg">
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-red-100' : ''}`}
-                                  onClick={() =>
-                                    handleStatusChange(user._id, user.status === 'active' ? 'blocked' : 'active')
-                                  }
-                                >
-                                  {user.status === 'active' ? 'Block' : 'Unblock'}
-                                </button>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-red-100' : ''}`}
-                                  onClick={() => handleRoleChange(user._id, 'volunteer')}
-                                >
-                                  Make Volunteer
-                                </button>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  className={`block px-4 py-2 text-sm w-full text-left ${active ? 'bg-red-100' : ''}`}
-                                  onClick={() => handleRoleChange(user._id, 'admin')}
-                                >
-                                  Make Admin
-                                </button>
-                              )}
-                            </Menu.Item>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
+                      <button
+                        className="px-4 py-2 bg-red-200 rounded text-red-600"
+                        onClick={() => openModal(user)}
+                      >
+                        Actions
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -172,6 +141,8 @@ const ManageUsers = () => {
             </table>
           </div>
         </div>
+
+        {/* Pagination */}
         <div className="flex justify-between items-center mt-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -192,6 +163,46 @@ const ManageUsers = () => {
           </button>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && selectedUser && (
+       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+       <div className="bg-white p-6 rounded-lg w-full sm:w-1/2">
+         <h2 className="text-xl font-semibold text-red-600">User Actions</h2>
+         <p className="my-2">What would you like to do with {selectedUser.name}?</p>
+     
+         <div className="mt-4 flex justify-start gap-4">
+           <button
+             className="px-4 py-2 bg-red-600 text-white rounded"
+             onClick={() =>
+               handleStatusChange(selectedUser._id, selectedUser.status === 'active' ? 'blocked' : 'active')
+             }
+           >
+             {selectedUser.status === 'active' ? 'Block' : 'Unblock'}
+           </button>
+           <button
+             className="px-4 py-2 bg-yellow-600 text-white rounded"
+             onClick={() => handleRoleChange(selectedUser._id, 'volunteer')}
+           >
+             Make Volunteer
+           </button>
+           <button
+             className="px-4 py-2 bg-blue-600 text-white rounded"
+             onClick={() => handleRoleChange(selectedUser._id, 'admin')}
+           >
+             Make Admin
+           </button>
+           <button
+             className="px-4 py-2 bg-gray-300 text-black rounded"
+             onClick={closeModal}
+           >
+             Close
+           </button>
+         </div>
+       </div>
+     </div>
+     
+      )}
     </div>
   );
 };

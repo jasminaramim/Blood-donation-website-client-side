@@ -10,6 +10,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import { useEffect } from "react";
+import BloodDonateRequestsPublic from "./BloodDonateRequestsPublic";
 const REGISTRATION_URL = "/signup";
 const SEARCH_URL = "/search";
 
@@ -146,7 +147,10 @@ const Home = () => {
     </section>
 
 
-
+    <section className="py-12 px-6 bg-gray-100">
+      
+        <BloodDonateRequestsPublic/>
+      </section>
 
 
 
@@ -221,6 +225,7 @@ const Home = () => {
           </p>
         </div>
       </section>
+    
     </div>
   );
 };

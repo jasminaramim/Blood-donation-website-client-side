@@ -1,70 +1,72 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { FcGoogle } from 'react-icons/fc'
-import useAuth from '../Hoooks/useAuth'
-import { toast } from 'react-hot-toast'
-import { TbFidgetSpinner } from 'react-icons/tb'
-import { imageUpload } from '../Api/utils'
+
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
+import useAuth from '../Hoooks/useAuth';
+import { toast } from 'react-hot-toast';
+import { TbFidgetSpinner } from 'react-icons/tb';
+import { imageUpload } from '../Api/utils';
 
 const Registration = () => {
-  const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth()
-  const navigate = useNavigate()
+  const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth();
+  const navigate = useNavigate();
 
   // Districts and Upazilas data
-  const districtsAndUpazilas = {
-    Dhaka: [
-      "Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Demra", "Tongi", "Shibpur", "Siddhirganj", "Narayanganj"
-    ],
-    Chittagong: [
-      "Patiya", "Sitakunda", "Boalkhali", "Rangunia", "Anwara", "Fatikchhari", "Mirsharai", "Lohagara", "Banshkhali", "Sandwip"
-    ],
-    Rajshahi: [
-      "Paba", "Durgapur", "Charghat", "Bagha", "Mohonpur", "Tanore", "Godagari", "Shibganj", "Niamatpur"
-    ],
-    Khulna: [
-      "Batiaghata", "Dacope", "Dumuria", "Koyra", "Terokhada", "Paikgachha", "Kalaroa", "Shyamnagar", "Assasuni"
-    ],
-    Barishal: [
-      "Bakerganj", "Barisal Sadar", "Agailjhara", "Muladi", "Banaripara", "Wazirpur", "Gournadi", "Uzirpur", "Kalapara"
-    ],
-    Sylhet: [
-      "Moulvibazar", "Rajnagar", "Juri", "Kulaura", "Sreemangal", "Fenchuganj", "Balaganj", "Gowainghat", "Companiganj"
-    ],
-    Rangpur: [
-      "Kurigram", "Gaibandha", "Lalmonirhat", "Nilphamari", "Rangpur Sadar", "Kachdana", "Pirganj", "Pirgachha", "Badarganj"
-    ],
-    Khagrachari: [
-      "Dighinala", "Lakshmipur", "Manikchhari", "Mahalchhari", "Madhupur", "Mohalchhari", "Khagrachhari Sadar"
-    ],
-    Comilla: [
-      "Laksam", "Titas", "Muradnagar", "Debidwar", "Monohorgonj", "Kamalnagar", "Comilla Sadar", "Nangalkot"
-    ],
-    Jessore: [
-      "Abhaynagar", "Chaugachha", "Keshabpur", "Jessore Sadar", "Benapole", "Shashibhushon", "Bagherpara", "Jhikargachha"
-    ],
-    Mymensingh: [
-      "Mymensingh Sadar", "Trishal", "Haluaghat", "Fulbaria", "Phulpur", "Gafargaon", "Nandail", "Bhaluka", "Kishoreganj"
-    ],
-    Noakhali: [
-      "Begumganj", "Chatkhil", "Companiganj", "Senbagh", "Haimchar", "Noakhali Sadar", "Chhagalnaiya"
-    ],
-    Madaripur: [
-      "Madaripur Sadar", "Shibchar", "Rajoir", "Kalkini", "Lohajang"
-    ],
-    Shariatpur: [
-      "Shariatpur Sadar", "Naria", "Gosairhat", "Bhedarganj", "Zinzira", "Chandpur"
-    ],
-    Chuadanga: [
-      "Chaudanga", "Maheshpur", "Shyamnagar", "Bhandaria", "Khanjahan Ali", "Bagerhat"
-    ],
-    Sunamganj: [
-      "Jagannathpur", "Chhatak", "Dasmina", "Shalla", "Sadar", "Moulvibazar"
-    ],
-    Bogura: [
-      "Sadar", "Sherpur", "Shibganj", "Gabtali", "Kahaloo", "Khetlal", "Dhunat", "Nandigram"
-    ]
-    // Add more districts and upazilas as necessary
-  };
+
+const districtsAndUpazilas = {
+  Dhaka: [
+    "Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Demra", "Tongi", "Shibpur", "Siddhirganj", "Narayanganj"
+  ],
+  Chittagong: [
+    "Patiya", "Sitakunda", "Boalkhali", "Rangunia", "Anwara", "Fatikchhari", "Mirsharai", "Lohagara", "Banshkhali", "Sandwip"
+  ],
+  Rajshahi: [
+    "Paba", "Durgapur", "Charghat", "Bagha", "Mohonpur", "Tanore", "Godagari", "Shibganj", "Niamatpur"
+  ],
+  Khulna: [
+    "Batiaghata", "Dacope", "Dumuria", "Koyra", "Terokhada", "Paikgachha", "Kalaroa", "Shyamnagar", "Assasuni"
+  ],
+  Barishal: [
+    "Bakerganj", "Barisal Sadar", "Agailjhara", "Muladi", "Banaripara", "Wazirpur", "Gournadi", "Uzirpur", "Kalapara"
+  ],
+  Sylhet: [
+    "Moulvibazar", "Rajnagar", "Juri", "Kulaura", "Sreemangal", "Fenchuganj", "Balaganj", "Gowainghat", "Companiganj"
+  ],
+  Rangpur: [
+    "Kurigram", "Gaibandha", "Lalmonirhat", "Nilphamari", "Rangpur Sadar", "Kachdana", "Pirganj", "Pirgachha", "Badarganj"
+  ],
+  Khagrachari: [
+    "Dighinala", "Lakshmipur", "Manikchhari", "Mahalchhari", "Madhupur", "Mohalchhari", "Khagrachhari Sadar"
+  ],
+  Comilla: [
+    "Laksam", "Titas", "Muradnagar", "Debidwar", "Monohorgonj", "Kamalnagar", "Comilla Sadar", "Nangalkot"
+  ],
+  Jessore: [
+    "Abhaynagar", "Chaugachha", "Keshabpur", "Jessore Sadar", "Benapole", "Shashibhushon", "Bagherpara", "Jhikargachha"
+  ],
+  Mymensingh: [
+    "Mymensingh Sadar", "Trishal", "Haluaghat", "Fulbaria", "Phulpur", "Gafargaon", "Nandail", "Bhaluka", "Kishoreganj"
+  ],
+  Noakhali: [
+    "Begumganj", "Chatkhil", "Companiganj", "Senbagh", "Haimchar", "Noakhali Sadar", "Chhagalnaiya"
+  ],
+  Madaripur: [
+    "Madaripur Sadar", "Shibchar", "Rajoir", "Kalkini", "Lohajang"
+  ],
+  Shariatpur: [
+    "Shariatpur Sadar", "Naria", "Gosairhat", "Bhedarganj", "Zinzira", "Chandpur"
+  ],
+  Chuadanga: [
+    "Chaudanga", "Maheshpur", "Shyamnagar", "Bhandaria", "Khanjahan Ali", "Bagerhat"
+  ],
+  Sunamganj: [
+    "Jagannathpur", "Chhatak", "Dasmina", "Shalla", "Sadar", "Moulvibazar"
+  ],
+  Bogura: [
+    "Sadar", "Sherpur", "Shibganj", "Gabtali", "Kahaloo", "Khetlal", "Dhunat", "Nandigram"
+  ]
+  // Add more districts and upazilas as necessary
+};
 
   const [district, setDistrict] = useState('');
   const [upazilas, setUpazilas] = useState([]);
@@ -125,7 +127,7 @@ const Registration = () => {
     try {
       // User Registration using Google
       const data = await signInWithGoogle();
-      await saveUser(data?.user); // Save the Google user data to your database
+      await saveUser(data?.user); 
       navigate('/');
       toast.success('Signup Successful');
     } catch (err) {
@@ -298,7 +300,7 @@ const Registration = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Registration
+export default Registration;

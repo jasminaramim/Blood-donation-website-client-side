@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
 import useAuth from '../../../Hoooks/useAuth';
 import LoadingSpinner from '../../../Shared/LoadingSpinner';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 const DonorDashboard = () => {
   const axiosSecure = useAxiosSecure();

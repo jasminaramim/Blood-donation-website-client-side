@@ -18,7 +18,7 @@ const DonorMenu = () => {
       <MenuItem icon={BsFingerprint} label="My Donation Requests" address="My-donation-request" />
       
       {/* Create Donation Request Menu Item with Plus Icon */}
-      <MenuItem icon={BsPlusCircle} label="Create Donation Request" address="add-blood" />
+      <MenuItem icon={BsPlusCircle} label="Create Donation Request" address="add-requests" />
     
     </>
   );

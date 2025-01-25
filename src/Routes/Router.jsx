@@ -26,6 +26,7 @@ import VolunteerDashboard from '../Pages/Dashboard/Volentiar/VolunteerDashboard'
 import Search from '../Home/Search'
 import PublishedBlogs from '../Home/PublishedBlogs'
 import BlogDetails from '../Home/BlogDetails'
+import BloodDonateRequestsPublic from '../Home/BloodDonateRequestsPublic'
 
 export const router = createHashRouter([
   {
@@ -41,6 +42,7 @@ export const router = createHashRouter([
         path: '/plant/:id',
         element: <BloodDetails />,
       },
+      { path: '/blood-donate-requests', element: <BloodDonateRequestsPublic /> },
       { path: '/search', element: <Search /> },
       { path: '/blogs', element: <PublishedBlogs /> },
       { path: '/blog-details/:id', element: <BlogDetails /> },
@@ -67,7 +69,7 @@ export const router = createHashRouter([
         ),
       },
       {
-        path: 'add-blood',
+        path: 'add-requests',
         element: (
           <PrivateRoute>
             <AddBloodForm />

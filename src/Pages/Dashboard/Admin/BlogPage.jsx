@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
 import toast from 'react-hot-toast';
-import useRole from '../../../Hoooks/useRole'; // Assuming the useRole hook path is correct
+import useRole from '../../../Hoooks/useRole'; 
 
 const BlogPage = () => {
-  const [blogs, setBlogs] = useState([]); // State for blogs
-  const [filter, setFilter] = useState('all'); // State for filtering by status
+  const [blogs, setBlogs] = useState([]); 
+  const [filter, setFilter] = useState('all'); 
   const axiosSecure = useAxiosSecure();
-  const [role, isLoadingRole] = useRole(); // Get role using useRole hook
+  const [role, isLoadingRole] = useRole();
 
   // Fetch blogs from the server using axiosSecure
   useEffect(() => {
