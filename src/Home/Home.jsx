@@ -11,14 +11,15 @@ import "aos/dist/aos.css";
 
 import { useEffect } from "react";
 import BloodDonateRequestsPublic from "./BloodDonateRequestsPublic";
+import FundingPage from "./FundingPage";
 const REGISTRATION_URL = "/signup";
 const SEARCH_URL = "/search";
 
 const Home = () => {
   useEffect(() => {
     AOS.init({
-      duration: 1000, 
-      once: false,    
+      duration: 1000,
+      once: false,
     });
     console.log('AOS initialized');
   }, []);
@@ -86,74 +87,76 @@ const Home = () => {
       <section>
         <PublishedBlogs />
       </section>
-
+    
       {/* Featured Section */}
       <section className="py-12 px-6 bg-gray-100">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl text-red-500 sm:text-4xl font-bold">
-          <span className="border-b-2 text-red-700 border-red-800">Why</span> Donate Blood?
-        </h2>
-        <p className="text-lg text-red-400 sm:text-xl mt-4">
-          Every donation counts. Your blood could save a life in need. Here's why donating blood is important:
-        </p>
-      </div>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl text-red-500 sm:text-4xl font-bold">
+            <span className="border-b-2 text-red-700 border-red-800">Why</span> Donate Blood?
+          </h2>
+          <p className="text-lg text-red-400 sm:text-xl mt-4">
+            Every donation counts. Your blood could save a life in need. Here's why donating blood is important:
+          </p>
+        </div>
 
-      {/* Card container */}
-      <div className="flex flex-col items-center justify-center space-y-24">
-        {[
-          {
-            title: "Save Lives",
-            text: "Your donation can help save someone’s life in critical need of blood.",
-            img: `${img1}`,
-          },
-          {
-            title: "Help Your Community",
-            text: "Contribute to your community and ensure that blood is always available in hospitals for those in need. Your donation helps maintain a reliable supply of blood for emergencies, surgeries, and medical treatments. By donating, you're supporting patients facing life-threatening conditions and making a significant impact in your local healthcare system.",
-            img: `${img2}`,
-          },
-          {
-            title: "Easy and Safe",
-            text: "Donating blood is a simple and safe process that only takes a few minutes. Each donation undergoes thorough screening to ensure safety for both the donor and the recipient. The process is well-regulated and conducted by trained professionals, making it completely safe. Plus, as a donor, you'll enjoy a quick health check-up.",
-            img: `${img3}`,
-          },
-        ].map((item, index) => (
-          <div
-          key={index}
-          className="relative mt-12 bg-red-100 max-w-4xl p-8  shadow-lg hover:shadow-xl transition-shadow duration-300 group"
-          data-aos="zoom-in-down"  
-        >
-            {/* Border Animation on Hover */}
-            <div className="absolute bottom-0 left-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-full"></div>
+        {/* Card container */}
+        <div className="flex flex-col items-center justify-center space-y-24">
+          {[
+            {
+              title: "Save Lives",
+              text: "Your donation can help save someone’s life in critical need of blood.",
+              img: `${img1}`,
+            },
+            {
+              title: "Help Your Community",
+              text: "Contribute to your community and ensure that blood is always available in hospitals for those in need. Your donation helps maintain a reliable supply of blood for emergencies, surgeries, and medical treatments. By donating, you're supporting patients facing life-threatening conditions and making a significant impact in your local healthcare system.",
+              img: `${img2}`,
+            },
+            {
+              title: "Easy and Safe",
+              text: "Donating blood is a simple and safe process that only takes a few minutes. Each donation undergoes thorough screening to ensure safety for both the donor and the recipient. The process is well-regulated and conducted by trained professionals, making it completely safe. Plus, as a donor, you'll enjoy a quick health check-up.",
+              img: `${img3}`,
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="relative mt-12 bg-red-100 max-w-4xl p-8  shadow-lg hover:shadow-xl transition-shadow duration-300 group"
+              data-aos="zoom-in-down"
+            >
+              {/* Border Animation on Hover */}
+              <div className="absolute bottom-0 left-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-full"></div>
 
-            {/* Image */}
-            {item.img && (
-              <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
-                <img
-                  className=" w-[200px] h-[200px] object-cover border-4 border-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:border-red-600"
-                  src={item.img}
-                  alt={item.title}
-                />
+              {/* Image */}
+              {item.img && (
+                <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
+                  <img
+                    className=" w-[200px] h-[200px] object-cover border-4 border-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:border-red-600"
+                    src={item.img}
+                    alt={item.title}
+                  />
+                </div>
+              )}
+
+              {/* Card Content */}
+              <div className="mt-32 flex flex-col items-center md:items-start text-center md:text-left">
+                <h3 className="text-xl border-b-2 text-black  border-red-300 font-bold">{item.title}</h3>
+                <p className="mt-4 text-gray-700">{item.text}</p>
               </div>
-            )}
-
-            {/* Card Content */}
-            <div className="mt-32 flex flex-col items-center md:items-start text-center md:text-left">
-              <h3 className="text-xl border-b-2 text-black  border-red-300 font-bold">{item.title}</h3>
-              <p className="mt-4 text-gray-700">{item.text}</p>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-
-    <section className="py-12 px-6 bg-gray-100">
-      
-        <BloodDonateRequestsPublic/>
+          ))}
+        </div>
       </section>
 
 
+      <section className="py-12 px-6 items-center bg-gray-100">
 
+        <BloodDonateRequestsPublic />
+      </section>
+
+
+      {/* <section>
+        <FundingPage />
+      </section> */}
       {/* Contact Us Section */}
       <section className="py-12 px-6 bg-blue-100">
         <div className="text-center mb-8">
@@ -225,7 +228,7 @@ const Home = () => {
           </p>
         </div>
       </section>
-    
+
     </div>
   );
 };

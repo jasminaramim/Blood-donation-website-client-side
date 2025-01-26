@@ -28,6 +28,7 @@ import PublishedBlogs from '../Home/PublishedBlogs'
 import BlogDetails from '../Home/BlogDetails'
 import BloodDonateRequestsPublic from '../Home/BloodDonateRequestsPublic'
 import DonationRequestsDetails from '../Home/DonationRequestsDetails'
+import FundingPage from '../Home/FundingPage'
 
 export const router = createHashRouter([
   {
@@ -48,6 +49,14 @@ export const router = createHashRouter([
         element: (
           <PrivateRoute>
             <DonationRequestsDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path:'funding-page',
+        element: (
+          <PrivateRoute>
+            <FundingPage />
           </PrivateRoute>
         ),
       },
