@@ -10,9 +10,8 @@ const DonationRequestsDetails = () => {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   
-  const { user } = useAuth();  
-  const [donorName, setDonorName] = useState(user?.name || ""); 
-  const [donorEmail, setDonorEmail] = useState(user?.email || ""); 
+
+  
 
   useEffect(() => {
     const fetchDonationRequestDetails = async () => {
@@ -30,24 +29,21 @@ const DonationRequestsDetails = () => {
     fetchDonationRequestDetails();
   }, [id]);
 
+  // const { id } = useParams();
+  console.log(id);  // Check if the 'id' is correct
+  
   const handleDonate = async () => {
     try {
-      // Change the status to "InProgress"
-      await axios.patch(
-        `${import.meta.env.VITE_API_URL}/donation-requests/${id}`,
-        {
-          status: "InProgress",
-          donorName,
-          donorEmail,
-        }
-      );
-      // Close the modal after donation is confirmed
+      console.log("Sending donation request for ID:", id);  // Check if the ID is correct here as well
+      await axios.put(`${import.meta.env.VITE_API_URL}/donation-requests/${id}`, {
+        status: "InProgress",
+      });
       setModalOpen(false);
     } catch (error) {
       console.error("Error confirming donation:", error);
     }
   };
-
+  
   if (loading) {
     return (
       <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
@@ -156,7 +152,7 @@ const DonationRequestsDetails = () => {
                 <label className="block text-gray-700">Donor Name</label>
                 <input
                   type="text"
-                  value={donationRequest.requesterName} 
+                  value={donationRequest?.requesterName || ""} // Ensure it's always a string
                   readOnly
                   className="w-full px-4 py-2 border rounded-md bg-gray-100"
                 />
@@ -165,7 +161,7 @@ const DonationRequestsDetails = () => {
                 <label className="block text-gray-700">Donor Email</label>
                 <input
                   type="email"
-                  value={donationRequest.requesterEmail} 
+                  value={donationRequest?.requesterEmail || ""} // Ensure it's always a string
                   readOnly
                   className="w-full px-4 py-2 border rounded-md bg-gray-100"
                 />
