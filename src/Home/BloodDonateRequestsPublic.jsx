@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hoooks/useAxiosSecure";
 import AOS from "aos";
-import "aos/dist/aos.css"; // Import AOS styles
-
+import "aos/dist/aos.css";
 const BloodDonateRequestsPublic = () => {
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
