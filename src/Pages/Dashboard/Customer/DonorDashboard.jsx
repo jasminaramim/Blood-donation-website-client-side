@@ -10,6 +10,8 @@ const DonorDashboard = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [recentRequests, setRecentRequests] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [requestToDelete, setRequestToDelete] = useState(null);
   const navigate = useNavigate(); 
 
   const { data: requests = [], isLoading } = useQuery({
@@ -35,6 +37,17 @@ const DonorDashboard = () => {
   const handleViewAllRequests = () => {
     navigate('/dashboard/My-donation-request');
   };
+
+  const handleEditRequest = (requestId) => {
+    navigate(`/dashboard/My-donation-request`);
+  };
+
+  const handleDeleteRequest = (request) => {
+    setRequestToDelete(request);
+    setShowDeleteModal(true);
+  };
+
+
 
   return (
     <div className="container mx-auto p-6">
@@ -78,6 +91,17 @@ const DonorDashboard = () => {
                 >
                   {request.status}
                 </p>
+
+                {/* Edit and Delete buttons */}
+                <div className="mt-4 flex justify-between">
+                  <button
+                    onClick={() => handleEditRequest(request._id)}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                  >
+                    Edit
+                  </button>
+                 
+                </div>
               </div>
             ))}
           </div>
@@ -94,6 +118,29 @@ const DonorDashboard = () => {
         </div>
       ) : (
         <p className="text-gray-500">You have no donation requests yet.</p>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 className="text-xl font-semibold mb-4">Are you sure you want to delete this request?</h3>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

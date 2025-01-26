@@ -4,13 +4,15 @@ import useAuth from '../../../Hoooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import LoadingSpinner from '../../../Shared/LoadingSpinner';
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
 
 const MyDonationRequests = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5); 
-  
+
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
@@ -35,11 +37,8 @@ const MyDonationRequests = () => {
       newFilteredRequests = requests.filter(request => request.status === statusFilter);
     }
 
-    // Only update the state if the filtered requests have changed
-    if (JSON.stringify(newFilteredRequests) !== JSON.stringify(filteredRequests)) {
-      setFilteredRequests(newFilteredRequests);
-    }
-  }, [requests, statusFilter, filteredRequests]);
+    setFilteredRequests(newFilteredRequests);
+  }, [requests, statusFilter]);
 
   const handleStatusFilterChange = (event) => {
     setStatusFilter(event.target.value);
@@ -58,6 +57,35 @@ const MyDonationRequests = () => {
 
   // Calculate total number of pages
   const totalPages = Math.ceil(filteredRequests.length / pageSize);
+
+  const deleteDonationRequest = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this donation request!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        // Send the DELETE request to the server
+        await axiosSecure.delete(`/donation-requests/${id}`);
+
+        // Show success message
+        toast.success('Donation request deleted successfully!');
+
+        // Update the state to remove the deleted request
+        setFilteredRequests((prevRequests) =>
+          prevRequests.filter((request) => request._id !== id)
+        );
+      } catch (err) {
+        // Show error message if the delete operation fails
+        toast.error('Failed to delete the donation request!');
+      }
+    }
+  };
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -92,6 +120,7 @@ const MyDonationRequests = () => {
             <th className="border px-4 py-2">Blood Group</th>
             <th className="border px-4 py-2">Hospital</th>
             <th className="border px-4 py-2">Status</th>
+            <th className="border px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -102,11 +131,19 @@ const MyDonationRequests = () => {
                 <td className="border px-4 py-2">{request.bloodGroup}</td>
                 <td className="border px-4 py-2">{request.hospitalName}</td>
                 <td className="border px-4 py-2">{request.status}</td>
+                <td className="border px-4 py-2">
+                  <button 
+                    onClick={() => deleteDonationRequest(request._id)} 
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="border px-4 py-2 text-center">
+              <td colSpan="5" className="border px-4 py-2 text-center">
                 No requests found
               </td>
             </tr>
