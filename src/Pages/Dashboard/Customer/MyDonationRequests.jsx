@@ -9,7 +9,7 @@ const MyDonationRequests = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(5); // Set the page size (number of rows per page)
+  const [pageSize] = useState(5); 
   
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
@@ -18,22 +18,28 @@ const MyDonationRequests = () => {
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ['requests', user?.email],
     queryFn: async () => {
+      if (!user?.email) return []; // Return empty array if no email is available
       const { data } = await axiosSecure(
-        `${import.meta.env.VITE_API_URL}/donation-requests/${user?.email}`
+        `${import.meta.env.VITE_API_URL}/donation-requests/email/${user?.email}`
       );
       return data;
     },
     enabled: !!user?.email, // Ensure query only runs when user.email is available
   });
-
+  
   useEffect(() => {
+    let newFilteredRequests = [];
     if (statusFilter === 'all') {
-      setFilteredRequests(requests);
+      newFilteredRequests = requests;
     } else {
-      const newFilteredRequests = requests.filter(request => request.status === statusFilter);
+      newFilteredRequests = requests.filter(request => request.status === statusFilter);
+    }
+
+    // Only update the state if the filtered requests have changed
+    if (JSON.stringify(newFilteredRequests) !== JSON.stringify(filteredRequests)) {
       setFilteredRequests(newFilteredRequests);
     }
-  }, [requests, statusFilter]);
+  }, [requests, statusFilter, filteredRequests]);
 
   const handleStatusFilterChange = (event) => {
     setStatusFilter(event.target.value);

@@ -12,7 +12,6 @@ const DonorDashboard = () => {
   const [recentRequests, setRecentRequests] = useState([]);
   const navigate = useNavigate(); 
 
- 
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ['donationRequests', user?.email],
     queryFn: async () => {
@@ -24,10 +23,12 @@ const DonorDashboard = () => {
     enabled: !!user?.email, 
   });
 
-  
+  // Only update recentRequests when requests change
   useEffect(() => {
-    setRecentRequests(requests.slice(0, 3)); 
-  }, [requests]);
+    if (requests.length > 0) {
+      setRecentRequests(requests.slice(0, 3)); 
+    }
+  }, [requests]); // Dependency array ensures this runs only when `requests` changes
 
   if (isLoading) return <LoadingSpinner />;
 

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import useAuth from "../Hoooks/useAuth";
-// import { useAuth } from "../context/AuthContext"; // Import the AuthContext
+import toast from "react-hot-toast";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const DonationRequestsDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [donationRequest, setDonationRequest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  
-
-  
 
   useEffect(() => {
     const fetchDonationRequestDetails = async () => {
@@ -29,21 +27,48 @@ const DonationRequestsDetails = () => {
     fetchDonationRequestDetails();
   }, [id]);
 
-  // const { id } = useParams();
-  console.log(id);  // Check if the 'id' is correct
-  
   const handleDonate = async () => {
     try {
-      console.log("Sending donation request for ID:", id);  // Check if the ID is correct here as well
-      await axios.put(`${import.meta.env.VITE_API_URL}/donation-requests/${id}`, {
+      // Update the donation status immediately
+      const updatedRequest = {
+        ...donationRequest,
         status: "InProgress",
+      };
+
+      // Make the PUT request to update the status
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/donation-requests/${id}`,
+        { status: "InProgress" }
+      );
+
+      // Update local state to reflect the updated status
+      setDonationRequest(updatedRequest);
+
+      // Show SweetAlert2 success popup
+      Swal.fire({
+        title: "Donation Confirmed!",
+        text: "Thank you for your donation. The status is now updated.",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        // Navigate to the home page after closing SweetAlert
+        navigate("/");
       });
-      setModalOpen(false);
+
+      // Show toast notification
+      toast.success("Donation confirmed and status updated!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+      });
     } catch (error) {
       console.error("Error confirming donation:", error);
+      toast.error("Failed to confirm donation.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+      });
     }
   };
-  
+
   if (loading) {
     return (
       <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
@@ -62,7 +87,7 @@ const DonationRequestsDetails = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="bg-white shadow-lg rounded-lg max-w-4xl w-full overflow-hidden">
+      <div className="bg-red-100 shadow-lg rounded-lg max-w-4xl w-full overflow-hidden">
         <div className="text-center p-6">
           <h1 className="text-3xl font-semibold text-red-600">
             Donation Request Details
@@ -70,9 +95,7 @@ const DonationRequestsDetails = () => {
 
           {/* Requester Information */}
           <div className="mt-5">
-            <h2 className="text-2xl font-bold text-gray-700">
-              Requester Information
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-700">Requester Information</h2>
             <p className="text-gray-600 mt-2">
               <strong>Name:</strong> {donationRequest.requesterName}
             </p>
@@ -83,9 +106,7 @@ const DonationRequestsDetails = () => {
 
           {/* Recipient Information */}
           <div className="mt-5">
-            <h2 className="text-2xl font-bold text-gray-700">
-              Recipient Information
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-700">Recipient Information</h2>
             <p className="text-gray-600 mt-2">
               <strong>Name:</strong> {donationRequest.recipientName}
             </p>
@@ -105,9 +126,7 @@ const DonationRequestsDetails = () => {
 
           {/* Donation Details */}
           <div className="mt-5">
-            <h2 className="text-2xl font-bold text-gray-700">
-              Donation Details
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-700">Donation Details</h2>
             <p className="text-gray-600 mt-2">
               <strong>Blood Group:</strong> {donationRequest.bloodGroup}
             </p>
@@ -152,7 +171,7 @@ const DonationRequestsDetails = () => {
                 <label className="block text-gray-700">Donor Name</label>
                 <input
                   type="text"
-                  value={donationRequest?.requesterName || ""} // Ensure it's always a string
+                  value={donationRequest?.requesterName || ""}
                   readOnly
                   className="w-full px-4 py-2 border rounded-md bg-gray-100"
                 />
@@ -161,7 +180,7 @@ const DonationRequestsDetails = () => {
                 <label className="block text-gray-700">Donor Email</label>
                 <input
                   type="email"
-                  value={donationRequest?.requesterEmail || ""} // Ensure it's always a string
+                  value={donationRequest?.requesterEmail || ""}
                   readOnly
                   className="w-full px-4 py-2 border rounded-md bg-gray-100"
                 />
