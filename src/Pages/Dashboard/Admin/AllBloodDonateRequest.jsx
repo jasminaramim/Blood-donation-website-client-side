@@ -197,7 +197,6 @@ const AllBloodDonateRequest = () => {
             <h3 className="text-lg font-semibold mb-4 text-gray-800">Update Request Status</h3>
             <div className="space-y-4">
               {['Pending', 'In Progress', 'Done', 'Cancelled'].map((status) => (
-                // Allow admins to update to any status, volunteers only to "Pending" and "In Progress"
                 (role?.role === 'admin' || ['Pending', 'In Progress'].includes(status)) && (
                   <button
                     key={status}
@@ -212,20 +211,11 @@ const AllBloodDonateRequest = () => {
                     }}
                     disabled={selectedRequest.status === status}
                   >
-                    <span className="font-medium">{status}</span>
-                    {selectedRequest.status === status && (
-                      <span className="text-green-500 font-bold text-xs">(Current)</span>
-                    )}
+                    {status}
                   </button>
                 )
               ))}
             </div>
-            <button
-              onClick={() => setSelectedRequest(null)}
-              className="mt-6 w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none"
-            >
-              Close
-            </button>
           </div>
         </div>
       )}
