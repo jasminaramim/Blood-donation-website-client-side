@@ -16,7 +16,7 @@ const DonorDashboard = () => {
     queryKey: ['donationRequests', user?.email],
     queryFn: async () => {
       const { data } = await axiosSecure(
-        `${import.meta.env.VITE_API_URL}/donation-requests/${user?.email}`
+        `${import.meta.env.VITE_API_URL}/donation-requests/email/${user?.email}`
       );
       return data;
     },
