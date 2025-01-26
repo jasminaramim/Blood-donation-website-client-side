@@ -17,8 +17,8 @@ const SEARCH_URL = "/search";
 const Home = () => {
   useEffect(() => {
     AOS.init({
-      duration: 1000, // Duration of the animation
-      once: false,    // Makes the animation repeat each time the element is in view
+      duration: 1000, 
+      once: false,    
     });
     console.log('AOS initialized');
   }, []);

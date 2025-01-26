@@ -27,6 +27,7 @@ import Search from '../Home/Search'
 import PublishedBlogs from '../Home/PublishedBlogs'
 import BlogDetails from '../Home/BlogDetails'
 import BloodDonateRequestsPublic from '../Home/BloodDonateRequestsPublic'
+import DonationRequestsDetails from '../Home/DonationRequestsDetails'
 
 export const router = createHashRouter([
   {
@@ -41,6 +42,14 @@ export const router = createHashRouter([
       {
         path: '/plant/:id',
         element: <BloodDetails />,
+      },
+      {
+        path:'donation-request-details/:id',
+        element: (
+          <PrivateRoute>
+            <DonationRequestsDetails />
+          </PrivateRoute>
+        ),
       },
       { path: '/blood-donate-requests', element: <BloodDonateRequestsPublic /> },
       { path: '/search', element: <Search /> },

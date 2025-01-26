@@ -10,7 +10,6 @@ const useStatus = () => {
   const { data: status, isLoading, error } = useQuery({
     queryKey: ['status', user?.email],
     queryFn: async () => {
-  
       const { data } = await axiosSecure(`/all-users/status/${user.email}`);
       return data;  
     },
@@ -18,7 +17,13 @@ const useStatus = () => {
     onError: (err) => console.error('Error fetching status:', err),  // Error handling
   });
 
+  // Log the status to check the fetched data
+  console.log('Fetched status:', status);
+
   return [status, isLoading, error]; 
 };
 
 export default useStatus;
+
+
+
