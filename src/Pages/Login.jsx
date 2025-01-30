@@ -15,21 +15,28 @@ const Login = () => {
   if (user) return <Navigate to={from} replace={true} />;
   if (loading) return <LoadingSpinner />;
 
-  const handleSubmit = async event => {
-    event.preventDefault();
-    const form = event.target;
-    const email = form.email.value;
-    const password = form.password.value;
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const email = form.email.value;
+  const password = form.password.value;
 
-    try {
-      await signIn(email, password);
-      navigate(from, { replace: true });
-      toast.success('Login Successful');
-    } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
+  try {
+    await signIn(email, password);
+    navigate(from, { replace: true });
+    toast.success("Login Successful");
+  } catch (err) {
+    console.error(err.code, err.message);
+    if (err.code === "auth/user-not-found") {
+      toast.error("User not found. Please sign up first.");
+    } else if (err.code === "auth/wrong-password") {
+      toast.error("Incorrect password. Please try again.");
+    } else {
+      toast.error("Login failed. Please try again later.");
     }
-  };
+  }
+};
+
 
   const handleGoogleSignIn = async () => {
     try {

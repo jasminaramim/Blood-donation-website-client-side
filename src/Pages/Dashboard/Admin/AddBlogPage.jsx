@@ -18,32 +18,43 @@ const AddBlogPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-
+  
     const formData = new FormData(event.target);
     const imageFile = uploadImage?.image;
-
+  
     try {
       // Upload image first
       const photoURL = await imageUpload(imageFile); 
-
+      
+      if (!photoURL) {
+        toast.error('Image upload failed.');
+        return;
+      }
+  
+      // Log photoURL to check if it's valid
+      console.log('Uploaded Image URL:', photoURL);
+  
       // Prepare blog data
       const blogData = {
         title: formData.get('title'),
         category: formData.get('category'),
         description: formData.get('description'),
-        imageUrl: photoURL, 
-        status: 'draft', 
-        author: user?.displayName || 'Anonymous', 
+        imageUrl: photoURL,  // Ensure image URL is passed here
+        status: 'draft',
+        author: user?.displayName || 'Anonymous',
       };
-
+  
+      // Log blogData to confirm all fields are correct
+      console.log('Blog data:', blogData);
+  
       // Save blog data to the server
       const response = await axiosSecure.post(`${import.meta.env.VITE_API_URL}/add-blog`, blogData);
-
+  
       if (response.status === 201) {
         toast.success('Blog added successfully!');
         event.target.reset();
-        setUploadImage({}); // Clear uploaded image
-        navigate('/dashboard/ContentManagementPage'); // Redirect to content management page
+        setUploadImage({});  // Clear uploaded image
+        navigate('/dashboard/ContentManagementPage');  // Redirect to content management page
       }
     } catch (error) {
       console.error('Error adding blog:', error);
@@ -52,6 +63,8 @@ const AddBlogPage = () => {
       setLoading(false);
     }
   };
+  
+
 
   return (
     <div className="w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50">
@@ -110,7 +123,7 @@ const AddBlogPage = () => {
               onChange={(e) =>
                 setUploadImage({
                   image: e.target.files[0],
-                  url: URL.createObjectURL(e.target.files[0]), // Temporary preview
+                  url: URL.createObjectURL(e.target.files[0]),
                 })
               }
               className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-100 file:text-red-700 hover:file:bg-red-200"

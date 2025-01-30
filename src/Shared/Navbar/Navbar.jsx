@@ -37,7 +37,7 @@ const Navbar = () => {
                       <img
                         className='rounded-full'
                         referrerPolicy='no-referrer'
-                        src={user.photoURL ? user.photoURL : avatarImg}
+                        src={user.photoURL ? user.photoURL : <FaUserCircle size={30} />}
                         alt='profile'
                         height='30'
                         width='30'
