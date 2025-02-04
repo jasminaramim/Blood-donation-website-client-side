@@ -3,7 +3,8 @@ Here’s an improved version of your README file, fulfilling the 7 points reques
 ---
 
 # Blood Donation Website
-
+![Blood Donation Website Screenshot](./src/assets/images/image.png)
+![Blood Donation Website Screenshot](./src/assets/images/image22.png)
 ## 🔗 **Live Site URL**  
 [Live Demo](https://blood-donateion-website.netlify.app)
 
@@ -17,7 +18,7 @@ The **Blood Donation Website** is a platform designed to facilitate the connecti
 ---
 
 ### 🖼 **Screenshot**  
-![Blood Donation Website Screenshot](./src/assets/images/image.png)
+
 
 ---
 
