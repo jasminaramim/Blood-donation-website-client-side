@@ -1,4 +1,4 @@
-Here’s an improved version of your README file, fulfilling the 7 points requested:
+
 
 ---
 
@@ -8,16 +8,14 @@ Here’s an improved version of your README file, fulfilling the 7 points reques
 ## 🔗 **Live Site URL**  
 [Live Demo](https://blood-donateion-website.netlify.app)
 
-## 🔑 **Admin Login**  
-- **Username**: jasmimaramim2005@gmail.com  
-- **Password**: @#jasmin#2005  
+ 
 
 ## 📌 **Project Overview**  
 The **Blood Donation Website** is a platform designed to facilitate the connection between blood donors and blood banks. It includes a user dashboard for donors to manage their donation history and a secure admin panel for managing requests and updating the status of blood donations.
 
 ---
 
-### 🖼 **Screenshot**  
+
 
 
 ---
@@ -72,8 +70,7 @@ Feel free to fork the repository, submit issues, or send pull requests.
 
 ---
 
-### 📄 **License**  
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
 ---
 
