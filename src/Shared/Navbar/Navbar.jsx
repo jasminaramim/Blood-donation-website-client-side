@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'; // Use NavLink instead of Link
+import { NavLink } from 'react-router-dom'; 
 import { AiOutlineMenu } from 'react-icons/ai';
 import { FaUserCircle } from 'react-icons/fa';
 import { CiLogout } from 'react-icons/ci';
