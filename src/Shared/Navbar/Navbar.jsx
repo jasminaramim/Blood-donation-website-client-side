@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom'; // Use NavLink instead of Link
 import { AiOutlineMenu } from 'react-icons/ai';
 import { FaUserCircle } from 'react-icons/fa';
 import { CiLogout } from 'react-icons/ci';
@@ -16,7 +16,7 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -29,9 +29,9 @@ const Navbar = () => {
         <div className='flex items-center justify-between py-3 px-6'>
           {/* Logo and Title */}
           <div className='flex items-center'>
-            <Link to='/'>
+            <NavLink to='/'>
               <img src={logo} alt='logo' className='w-16 h-16 object-contain' />
-            </Link>
+            </NavLink>
             <p className='text-gray-800 font-bold text-xl md:text-2xl'>
               Blood <span className='text-red-500'>Donation</span>
             </p>
@@ -39,19 +39,41 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className='hidden md:flex gap-6 font-semibold text-lg'>
-            <Link to='/' className='hover:text-red-500 transition'>Home</Link>
-            <Link to='/aboutUs' className='hover:text-red-500  transition'>About</Link>
-            <Link to='/contactUs' className='hover:text-red-500 transition'>Contact</Link>
+            <NavLink 
+              to='/' 
+              className={({ isActive }) => (isActive ? 'text-red-500' : 'hover:text-red-500 transition')}
+            >
+              Home
+            </NavLink>
+            <NavLink 
+              to='/aboutUs' 
+              className={({ isActive }) => (isActive ? 'text-red-500' : 'hover:text-red-500 transition')}
+            >
+              About
+            </NavLink>
+            <NavLink 
+              to='/contactUs' 
+              className={({ isActive }) => (isActive ? 'text-red-500' : 'hover:text-red-500 transition')}
+            >
+              Contact
+            </NavLink>
             {user && (
               <>
-                <Link to='/dashboard' className='hover:text-red-500 transition'>Dashboard</Link>
-                <Link to='/signup' className='hover:text-red-500 transition'>Donate</Link>
+                <NavLink 
+                  to='/dashboard' 
+                  className={({ isActive }) => (isActive ? 'text-red-500' : 'hover:text-red-500 transition')}
+                >
+                  Dashboard
+                </NavLink>
+                <NavLink 
+                  to='/signup' 
+                  className={({ isActive }) => (isActive ? 'text-red-500' : 'hover:text-red-500 transition')}
+                >
+                  Donate
+                </NavLink>
               </>
             )}
           </div>
-
-          {/* Theme Toggle Button */}
-      
 
           {/* User Profile and Dropdown */}
           <div className='relative'>
@@ -91,22 +113,28 @@ const Navbar = () => {
                     </div>
                   )}
 
-                  {/* Mobile Navigation Links */}
-                  <Link to='/' className='block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>Home</Link>
-                  <Link to='/aboutUs' className='block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>About</Link>
-                  <Link to='/contactUs' className='block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>Contact</Link>
+              
 
                   {user ? (
                     <>
-                      <Link to='/dashboard/profile' className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>
+                      <NavLink 
+                        to='/dashboard/profile' 
+                        className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'
+                      >
                         Profile
-                      </Link>
-                      <Link to='/dashboard' className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>
+                      </NavLink>
+                      <NavLink 
+                        to='/dashboard' 
+                        className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'
+                      >
                         Dashboard
-                      </Link>
-                      <Link to='/signup' className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>
+                      </NavLink>
+                      <NavLink 
+                        to='/signup' 
+                        className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'
+                      >
                         Donate
-                      </Link>
+                      </NavLink>
                       <div 
                         onClick={logOut} 
                         className='px-4 py-3 flex text-red-500 items-center gap-2 hover:bg-neutral-100 transition font-semibold cursor-pointer border-b border-gray-200'
@@ -117,8 +145,18 @@ const Navbar = () => {
                     </>
                   ) : (
                     <>
-                      <Link to='/login' className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'>Login</Link>
-                      <Link to='/signup' className='px-4 py-3 hover:bg-neutral-100 transition font-semibold'>Sign Up</Link>
+                      <NavLink 
+                        to='/login' 
+                        className='px-4 py-3 hover:bg-neutral-100 transition font-semibold border-b border-gray-200'
+                      >
+                        Login
+                      </NavLink>
+                      <NavLink 
+                        to='/signup' 
+                        className='px-4 py-3 hover:bg-neutral-100 transition font-semibold'
+                      >
+                        Sign Up
+                      </NavLink>
                     </>
                   )}
                 </div>

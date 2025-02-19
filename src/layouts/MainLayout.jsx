@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-// import Navbar from '../'; // Your Navbar component
-// import Footer from './Footer'; // Your Footer component
-import { Outlet } from 'react-router-dom'; // This will render the nested routes
+import { Outlet } from 'react-router-dom';
 import Navbar from '../Shared/Navbar/Navbar';
 import Footer from '../Shared/Footer/Footer';
 
@@ -9,7 +7,6 @@ const MainLayout = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // Load dark mode preference from localStorage or use default
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       setDarkMode(savedTheme === 'dark');
@@ -17,7 +14,7 @@ const MainLayout = () => {
   }, []);
 
   useEffect(() => {
-    // Apply dark mode to the <html> element
+    console.log("Dark Mode:", darkMode); // Debugging the darkMode state
     if (darkMode) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
@@ -30,7 +27,7 @@ const MainLayout = () => {
   return (
     <div className={darkMode ? 'dark' : ''}>
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-      <main className="min-h-screen">
+      <main className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white">
         <Outlet />
       </main>
       <Footer />

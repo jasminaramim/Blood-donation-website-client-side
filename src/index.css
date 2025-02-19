@@ -3,15 +3,3 @@
 @tailwind utilities;
 
 
-/* Default light theme */
-body {
-    background-color: white;
-    color: black;
-  }
-  
-  /* Dark theme styles */
-  .dark body {
-    background-color: #1a202c; /* dark background */
-    color: white;
-  }
-  
