@@ -8,7 +8,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { useState, useEffect } from 'react';
 import welcome from '../../../assets/images/5481497_2769504-removebg-preview.png'
 
-// Register Chart.js components
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const VolunteerDashboard = () => {
@@ -31,7 +31,7 @@ const VolunteerDashboard = () => {
 
   useEffect(() => {
     if (isRoleLoading) {
-      setIsModalOpen(false); // Close modal while loading role
+      setIsModalOpen(false); 
     }
   }, [isRoleLoading]);
 
