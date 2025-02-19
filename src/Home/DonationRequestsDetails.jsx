@@ -86,63 +86,68 @@ const DonationRequestsDetails = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
+    <div className="p-6 mt-20 bg-gray-100 min-h-screen flex items-center justify-center">
       <div className="bg-red-100 shadow-lg rounded-lg max-w-4xl w-full overflow-hidden">
-        <div className="text-center p-6">
-          <h1 className="text-3xl font-semibold text-red-600">
+        <div className="text-center ">
+          <h1 className="text-3xl p-6 font-semibold text-red-600">
             Donation Request Details
           </h1>
 
-          {/* Requester Information */}
-          <div className="mt-5">
-            <h2 className="text-2xl font-bold text-gray-700">Requester Information</h2>
-            <p className="text-gray-600 mt-2">
-              <strong>Name:</strong> {donationRequest.requesterName}
-            </p>
-            <p className="text-gray-600">
-              <strong>Email:</strong> {donationRequest.requesterEmail}
-            </p>
-          </div>
+          <div className="flex mt-8 ">
+            <div className="bg-red-300 w-2/4 ">
+              {/* Requester Information */}
+              <div className="mt-5 ">
+                <h2 className="text-2xl  font-bold text-gray-700">Requester Information</h2>
+                <p className="text-gray-600  mt-2">
+                  <strong>Name:</strong> {donationRequest.requesterName}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Email:</strong> {donationRequest.requesterEmail}
+                </p>
+              </div>
 
-          {/* Recipient Information */}
-          <div className="mt-5">
-            <h2 className="text-2xl font-bold text-gray-700">Recipient Information</h2>
-            <p className="text-gray-600 mt-2">
-              <strong>Name:</strong> {donationRequest.recipientName}
-            </p>
-            <p className="text-gray-600">
-              <strong>District:</strong> {donationRequest.recipientDistrict}
-            </p>
-            <p className="text-gray-600">
-              <strong>Upazila:</strong> {donationRequest.recipientUpazila}
-            </p>
-            <p className="text-gray-600">
-              <strong>Hospital Name:</strong> {donationRequest.hospitalName}
-            </p>
-            <p className="text-gray-600">
-              <strong>Full Address:</strong> {donationRequest.fullAddress}
-            </p>
-          </div>
+              {/* Recipient Information */}
+              <div className="mt-5 p-2 ">
+                <h2 className="text-2xl border-b font-bold text-gray-700">Recipient Information</h2>
+                <p className="text-gray-600 mt-2">
+                  <strong>Name:</strong> {donationRequest.recipientName}
+                </p>
+                <p className="text-gray-600">
+                  <strong>District:</strong> {donationRequest.recipientDistrict}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Upazila:</strong> {donationRequest.recipientUpazila}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Hospital Name:</strong> {donationRequest.hospitalName}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Full Address:</strong> {donationRequest.fullAddress}
+                </p>
+              </div>
+            </div>
 
-          {/* Donation Details */}
-          <div className="mt-5">
-            <h2 className="text-2xl font-bold text-gray-700">Donation Details</h2>
-            <p className="text-gray-600 mt-2">
-              <strong>Blood Group:</strong> {donationRequest.bloodGroup}
-            </p>
-            <p className="text-gray-600">
-              <strong>Donation Date:</strong> {donationRequest.donationDate}
-            </p>
-            <p className="text-gray-600">
-              <strong>Donation Time:</strong> {donationRequest.donationTime}
-            </p>
-            <p className="text-gray-600">
-              <strong>Request Message:</strong> {donationRequest.requestMessage}
-            </p>
+            <div className="bg-red-400 w-2/4 p-6">{/* Donation Details */}
+              <div className="mt-5">
+                <h2 className="text-2xl font-bold text-gray-700">Donation Details</h2>
+                <p className="text-gray-600 mt-2">
+                  <strong>Blood Group:</strong> {donationRequest.bloodGroup}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Donation Date:</strong> {donationRequest.donationDate}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Donation Time:</strong> {donationRequest.donationTime}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Request Message:</strong> {donationRequest.requestMessage}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Status */}
-          <div className="mt-5">
+          <div className="mt-5 ">
             <h2 className="text-2xl font-bold text-gray-700">Status</h2>
             <p className="text-gray-600 mt-2">
               <strong>Status:</strong> {donationRequest.status}
@@ -150,7 +155,7 @@ const DonationRequestsDetails = () => {
           </div>
 
           {/* Donate Button */}
-          <div className="mt-6">
+          <div className="mt-6 mb-10">
             <button
               onClick={() => setModalOpen(true)}
               className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"

@@ -1,15 +1,20 @@
 import { FaUserAlt, FaDollarSign, FaTint } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../Hoooks/useAxiosSecure';
-import useRole from '../../../Hoooks/useRole'; 
+import useRole from '../../../Hoooks/useRole';
 import { Calendar } from 'react-date-range';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { useState, useEffect } from 'react';
+import welcome from '../../../assets/images/5481497_2769504-removebg-preview.png'
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const VolunteerDashboard = () => {
   const axiosSecure = useAxiosSecure();
-
-
-  const [role, isRoleLoading] = useRole();  
-
+  const [role, isRoleLoading] = useRole();
+  const [isModalOpen, setIsModalOpen] = useState(true); // State to manage modal visibility
 
   const { data: requests = [] } = useQuery({
     queryKey: ['DonationRequests'],
@@ -22,19 +27,77 @@ const VolunteerDashboard = () => {
     refetchOnWindowFocus: false,
   });
 
-
   const totalDonationRequests = requests.length;
 
- 
-  if (isRoleLoading) {
-    return <div>Loading...</div>;  
-  }
+  useEffect(() => {
+    if (isRoleLoading) {
+      setIsModalOpen(false); // Close modal while loading role
+    }
+  }, [isRoleLoading]);
+
+  const chartData = {
+    labels: ['January', 'February', 'March', 'April', 'May'],
+    datasets: [
+      {
+        label: 'Donations Over Time',
+        data: [10, 20, 30, 40, 50],
+        borderColor: 'rgba(255, 59, 63, 1)',
+        backgroundColor: 'rgba(255, 59, 63, 0.2)',
+        fill: true,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Donation Trends Over the Year',
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      },
+    },
+  };
 
   return (
-    <div className="px-6 py-8 bg-red-100">
+    <div className="bg-red-200 p-4">
+      {/* Modal */}
+      {isModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+    <div className="bg-white rounded-lg p-8 max-w-sm w-full">
+      {/* Cute Welcome Image */}
+      <div className="text-center mb-4">
+        <img
+          src={welcome} // Replace with your image URL
+          alt="Welcome"
+          className="w-[180px] h-[180px] mx-auto"
+        />
+      </div>
+
+      <h2 className="text-xl font-bold text-center text-red-500">Welcome to the Dashboard!</h2>
+      <p className="mt-4 text-center text-gray-600">
+        We are happy to have you here. Manage and track your donation requests and funding efforts.
+      </p>
+      <div className="mt-6 flex justify-center">
+        <button
+          onClick={() => setIsModalOpen(false)}
+          className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition duration-300"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
       {/* Welcome Section */}
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-red-700">Welcome to the VolunteerDashboard 🏠</h1>
+        <h1 className="text-3xl font-bold text-red-700">Welcome to the Volunteer Dashboard 🏠</h1>
         <p className="mt-2 text-lg text-gray-600">
           Manage and track statistics for donors, funds, and blood donation requests.
         </p>
@@ -76,22 +139,21 @@ const VolunteerDashboard = () => {
         </div>
       </div>
 
-      {/* Charts and Calendar */}
+      {/* Overview and Graphical Elements */}
       <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        {/* Sales/Statistics Chart */}
-        {/* Placeholder for a chart */}
-        {/* <div className="relative bg-white shadow-md rounded-xl p-6 xl:col-span-2">
-          <h3 className="text-lg font-semibold text-gray-800">Statistics Overview</h3>
-          <div className="mt-4 h-64 bg-gray-100 flex items-center justify-center rounded-md">
-            <p className="text-gray-500">Chart Placeholder</p>
+        {/* Line Chart for Donations */}
+        <div className="relative bg-white shadow-md rounded-xl p-6 h-[390px]">
+          <h3 className="text-lg font-semibold text-gray-800">Donation Trends</h3>
+          <div className="mt-4 w-full h-full">
+            <Line data={chartData} options={chartOptions} />
           </div>
-        </div> */}
+        </div>
 
         {/* Calendar */}
-        <div className="relative bg-white shadow-md rounded-xl p-6">
+        <div className="relative bg-white w-[350px] shadow-md rounded-xl p-6 h-96">
           <h3 className="text-lg font-semibold text-gray-800">Calendar</h3>
           <div className="mt-4">
-            <Calendar color="#FF3B3F" />
+            <Calendar className="w-[300px]" color="#FF3B3F" />
           </div>
         </div>
       </div>

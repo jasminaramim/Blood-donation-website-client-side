@@ -118,7 +118,7 @@ const AllBloodDonateRequest = () => {
             id="statusFilter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="ml-2 px-4 py-2 bg-white border rounded-md"
+            className="ml-2 px-4 py-2 text-red-500 font-bold bg-white border rounded-md"
           >
             <option value="All">All</option>
             <option value="Pending">Pending</option>

@@ -29,6 +29,8 @@ import BlogDetails from '../Home/BlogDetails'
 import BloodDonateRequestsPublic from '../Home/BloodDonateRequestsPublic'
 import DonationRequestsDetails from '../Home/DonationRequestsDetails'
 import FundingPage from '../Home/FundingPage'
+import ContactForm from '../Pages/ContactForm'
+import About from '../Home/About'
 
 export const router = createHashRouter([
   {
@@ -36,6 +38,9 @@ export const router = createHashRouter([
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
+      
+  { path: '/contactUs', element: <ContactForm /> },
+  { path: '/aboutUs', element: <About /> },
       {
         path: '/',
         element: <Home />,
@@ -70,6 +75,8 @@ export const router = createHashRouter([
   { path: '/login', element: <Login /> },
   
   { path: '/signup', element: <Registration /> },
+
+  
   {
     path: '/dashboard',
     element: (

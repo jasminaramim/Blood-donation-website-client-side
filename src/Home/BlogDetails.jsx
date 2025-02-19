@@ -29,7 +29,7 @@ const BlogDetails = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
+        <div className="p-6 mt-16 bg-gray-100 min-h-screen flex items-center justify-center">
             <div
                 key={blog._id}
                 className="bg-white relative shadow-lg rounded-lg max-w-4xl w-full overflow-hidden group"

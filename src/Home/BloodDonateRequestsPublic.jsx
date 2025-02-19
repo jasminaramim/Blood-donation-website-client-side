@@ -47,7 +47,7 @@ const BloodDonateRequestsPublic = () => {
 
     return (
         <div className="max-w-6xl mx-auto py-8">
-            <h1 className="text-2xl font-bold text-center mb-6">Pending Donation Requests</h1>
+
             {pendingRequests.length === 0 ? (
                 <p className="text-center">No pending donation requests available.</p>
             ) : (
@@ -55,22 +55,47 @@ const BloodDonateRequestsPublic = () => {
                     {pendingRequests.map((request) => (
                         <div
                             key={request.id}
-                            className="p-4 border rounded-lg shadow-md bg-white hover:shadow-lg group"
+                            className=" border rounded-lg shadow-md bg-red-300/60 hover:shadow-lg group"
+
                             data-aos="flip-left"
                         >
-                            <div className="absolute bottom-0 left-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-full"></div>
-                            <h2 className="font-semibold text-lg">{request.recipientName}</h2>
-                            <p>Blood Group: <strong>{request.bloodGroup}</strong></p>
-                            <p>Location: {request.fullAddress}</p>
-                            <p>Date: {request.donationDate}</p>
-                            <p>Time: {request.donationTime}</p>
-                            <Link
-                                className="mt-4   text-red-600 rounded-md hover:bg-red-400 hover:text-red-700"
-                                to={`/donation-request-details/${request._id}`}
-                            >
-                                View
-                            </Link>
-                        </div>
+                            <div className="absolute  bottom-0 left-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-full"></div>
+
+                            {/* <div className="p-6  rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group"> */}
+                                {/* Animated Bottom Border on Hover */}
+                                <div className="absolute bottom-0 left-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-full"></div>
+
+                                <h2 className="font-semibold p-4 text-gray-800 text-2xl text-center border-b mb-4">{request.recipientName}</h2>
+
+                               
+                                <div className="grid grid-cols-1 sm:grid-cols-2 ">
+                                 
+                                    <div className="bg-red-400/30 text-white p-4  shadow-sm">
+                                        <p className="text-lg font-bold">
+                                            Blood Group: <span className="text-xl">{request.bloodGroup}</span>
+                                        </p>
+                                        <p className="text-sm opacity-90">📍 {request.fullAddress}</p>
+                                    </div>
+
+                                    <div className="bg-red-300 text-red-900 p-4  shadow-sm">
+                                        <p className="text-lg font-bold">📅 Date: {request.donationDate}</p>
+                                        <p className="text-sm opacity-90">⏰ Time: {request.donationTime}</p>
+                                    </div>
+
+                                </div>
+                                <div className="mt-4 p-4">
+                                    <Link
+                                        className="px-2 border-2 border-red-600 text-red-600 rounded-md hover:bg-red-600 hover:text-white transition duration-300"
+                                        to={`/donation-request-details/${request._id}`}
+                                    >
+                                        View
+                                    </Link>
+                                </div>
+                            </div>
+
+
+
+                        // </div>
                     ))}
                 </div>
             )}
