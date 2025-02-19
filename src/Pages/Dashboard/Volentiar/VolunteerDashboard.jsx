@@ -14,7 +14,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const VolunteerDashboard = () => {
   const axiosSecure = useAxiosSecure();
   const [role, isRoleLoading] = useRole();
-  const [isModalOpen, setIsModalOpen] = useState(true); // State to manage modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(true); 
 
   const { data: requests = [] } = useQuery({
     queryKey: ['DonationRequests'],
